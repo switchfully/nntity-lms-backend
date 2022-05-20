@@ -1,13 +1,12 @@
 package com.example.nntitylms.Student.api;
 
-import com.example.nntitylms.Student.api.dto.StudentLoginDto;
 import com.example.nntitylms.Student.api.dto.StudentSessionDto;
+import com.example.nntitylms.Student.domain.Student;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.UUID;
@@ -24,22 +23,23 @@ class StudentControllerTest {
     @Test
     void givenUsernameAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
         //  GIVEN
-        StudentLoginDto studentToLog = new StudentLoginDto("Tarzan@Jungle.com", "JaneIsTheLoveOfMyLife");
-        StudentSessionDto studentSessionDto = new StudentSessionDto(UUID.fromString("ce330ca0-d83a-11ec-9d64-0242ac120002"), "Tarzan");
+        Student student = new Student(UUID.fromString("ce330ca0-d83a-11ec-9d64-0242ac120002"), "Tarzan", "Tarzan@Jungle.com", "JaneIsTheLoveOfMyLife");
+
+        StudentSessionDto expectedStudentSession = new StudentSessionDto(UUID.fromString("ce330ca0-d83a-11ec-9d64-0242ac120002"), "Tarzan");
         //  WHEN
-        StudentSessionDto session = RestAssured
+        StudentSessionDto actualStudentSession = RestAssured
                 .given()
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .queryParam("email" , studentToLog.getEmail())
-                .queryParam( "password" , studentToLog.getPassword())
+                .queryParam("email" , student.getEmail())
+                .queryParam( "password" , student.getPassword())
                 .get("/students")
                 .then()
                 .assertThat()
                 .statusCode(OK.value())
                 .extract().as(StudentSessionDto.class);
         //  THEN
-        Assertions.assertThat(session).isEqualTo(studentSessionDto);
+        Assertions.assertThat(actualStudentSession).isEqualTo(expectedStudentSession);
     }
 }
