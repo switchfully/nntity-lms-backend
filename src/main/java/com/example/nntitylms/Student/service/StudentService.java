@@ -17,7 +17,7 @@ public class StudentService {
     }
 
     public StudentSessionDto loginStudent(String email, String password) {
-        Student foundStudent = studentRepository.findStudentByEmail(email);
+        Student foundStudent = studentRepository.findByEmail(email);
         return studentMapper.toSessionDto(foundStudent);
     }
 }
