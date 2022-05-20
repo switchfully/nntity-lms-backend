@@ -1,7 +1,10 @@
 package com.example.nntitylms.Student.api;
 
+import com.example.nntitylms.Student.api.dto.StudentSessionDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 import static org.springframework.http.MediaType.*;
 
@@ -11,8 +14,8 @@ import static org.springframework.http.MediaType.*;
 public class StudentController {
 
     @GetMapping(params = {"email", "password"}, produces = APPLICATION_JSON_VALUE)
-    String loginStudent(@RequestParam String email, @RequestParam String password){
-        return "hello";
+    StudentSessionDto loginStudent(@RequestParam String email, @RequestParam String password){
+        return new StudentSessionDto(UUID.fromString("ce330ca0-d83a-11ec-9d64-0242ac120002"), "Tarzan");
     }
 
 }
