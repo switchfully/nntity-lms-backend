@@ -28,7 +28,7 @@ class StudentControllerTest {
     private int port;
 
     @Test
-    void givenUsernameAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
+    void givenEmailAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
         //  GIVEN
         Student student = studentRepository.findByEmail("Tarzan@Jungle.com");
 
@@ -48,5 +48,26 @@ class StudentControllerTest {
                 .extract().as(StudentSessionDto.class);
         //  THEN
         Assertions.assertThat(actualStudentSession).isEqualTo(expectedStudentSession);
+    }
+
+    @Test
+    void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequest() {
+        //  GIVEN
+
+        //  WHEN
+        RestAssured
+                .given()
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .queryParam("email" , "Tarsan@Jungle.com")
+                .queryParam( "password" , "password")
+                .get("/students")
+                .then()
+                .assertThat()
+                .statusCode(BAD_REQUEST.value());
+
+        //  THEN
+
     }
 }
