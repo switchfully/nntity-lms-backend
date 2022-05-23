@@ -19,11 +19,18 @@ public class StudentService {
     }
 
     public StudentSessionDto loginStudent(String email, String password) {
+        checkValidEmailAndPassword(email, password);
+
+        Student foundStudent = studentRepository.findByEmail(email);
+        return studentMapper.toSessionDto(foundStudent);
+    }
+
+    private void checkValidEmailAndPassword(String email, String password) {
         if (!studentRepository.existsByEmail(email)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
         }
-        Student foundStudent = studentRepository.findByEmail(email);
-
-        return studentMapper.toSessionDto(foundStudent);
+        if (!studentRepository.existsByEmailAndPassword(email, password)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.example.nntitylms.Student.api;
 import com.example.nntitylms.Student.api.dto.StudentSessionDto;
 import com.example.nntitylms.Student.domain.Student;
 import com.example.nntitylms.Student.domain.StudentRepository;
+import com.example.nntitylms.Student.service.StudentService;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,10 +12,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.OK;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -26,6 +29,8 @@ class StudentControllerTest {
 
     @LocalServerPort
     private int port;
+    @Autowired
+    private StudentService studentService;
 
     @Test
     void givenEmailAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
@@ -39,8 +44,8 @@ class StudentControllerTest {
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .queryParam("email" , student.getEmail())
-                .queryParam( "password" , student.getPassword())
+                .queryParam("email", student.getEmail())
+                .queryParam("password", student.getPassword())
                 .get("/students")
                 .then()
                 .assertThat()
@@ -53,21 +58,51 @@ class StudentControllerTest {
     @Test
     void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequest() {
         //  GIVEN
-
+        String incorrectEmail = "Tarsan@Jungle.com";
+        String correctPassword = "JaneIsTheLoveOfMyLife";
         //  WHEN
         RestAssured
                 .given()
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .queryParam("email" , "Tarsan@Jungle.com")
-                .queryParam( "password" , "password")
+                .queryParam("email", incorrectEmail)
+                .queryParam("password", correctPassword)
+                .get("/students")
+                .then()
+                .assertThat()
+                .statusCode(BAD_REQUEST.value());
+
+//  THEN
+        Throwable thrown = Assertions.catchThrowable(() -> studentService.loginStudent(incorrectEmail, correctPassword));
+        Assertions.assertThat(thrown)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
+    }
+
+    @Test
+    void givenWrongPassword_WhenLoginStudent_ThenReturnBadRequest() {
+        //  GIVEN
+        String correctEmail = "Tarzan@Jungle.com";
+        String incorrectPassword = "dummyPassword";
+        //  WHEN
+        RestAssured
+                .given()
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .queryParam("email", correctEmail)
+                .queryParam("password", incorrectPassword)
                 .get("/students")
                 .then()
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());
 
         //  THEN
+        Throwable thrown = Assertions.catchThrowable(() -> studentService.loginStudent(correctEmail, incorrectPassword));
+        Assertions.assertThat(thrown)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
 
     }
 }
