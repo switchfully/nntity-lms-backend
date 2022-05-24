@@ -1,5 +1,6 @@
 package com.example.nntitylms.Student.service;
 
+import com.example.nntitylms.Security.KeycloakTokenProvider;
 import com.example.nntitylms.Student.api.dto.StudentSessionDto;
 import com.example.nntitylms.Student.domain.Student;
 import com.example.nntitylms.Student.domain.StudentRepository;
@@ -12,17 +13,22 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
+    private final KeycloakTokenProvider keycloakTokenProvider;
 
-    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper) {
+    public StudentService(StudentRepository studentRepository, StudentMapper studentMapper, KeycloakTokenProvider keycloakCall) {
         this.studentRepository = studentRepository;
         this.studentMapper = studentMapper;
+        this.keycloakTokenProvider = keycloakCall;
     }
 
     public StudentSessionDto loginStudent(String email, String password) {
         checkValidEmailAndPassword(email, password);
 
         Student foundStudent = studentRepository.findByEmail(email);
-        return studentMapper.toSessionDto(foundStudent);
+
+        String studentToken = keycloakTokenProvider.getToken(foundStudent.getDisplayName(), foundStudent.getPassword());
+
+        return studentMapper.toSessionDto(foundStudent, studentToken);
     }
 
     private void checkValidEmailAndPassword(String email, String password) {
