@@ -5,3 +5,15 @@ VALUES (
         'Tarzan@Jungle.com',
         'JaneIsTheLoveOfMyLife'
         );
+
+INSERT INTO CODELAB (id, name)
+VALUES (
+           nextval('codelab_seq'),
+        'codelabTest1'
+       );
+
+INSERT INTO CODELAB (id, name)
+VALUES (
+           nextval('codelab_seq'),
+           'codelabTest2'
+       );

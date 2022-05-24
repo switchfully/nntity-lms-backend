@@ -26,8 +26,8 @@ class CodelabControllerTest {
     @Test
     void getAllCodelabs_CorrectlyReturningAllCodelabs() {
         List<CodelabDto> expectedCodelabList = Lists.newArrayList(
-                new CodelabDto(1L, "Codelab01"),
-                new CodelabDto(2L, "Codelab02")
+                new CodelabDto(3L, "CodelabTest1"),
+                new CodelabDto(4L, "CodelabTest2")
         );
 
         List<CodelabDto> actualCodelabList = RestAssured
@@ -45,6 +45,8 @@ class CodelabControllerTest {
                 .jsonPath()
                 .getList(".", CodelabDto.class);
 
-        Assertions.assertThat(actualCodelabList).hasSameElementsAs(expectedCodelabList);
+        Assertions.assertThat(actualCodelabList).extracting(CodelabDto::getName).contains("CodelabTest1");
+        Assertions.assertThat(actualCodelabList).extracting(CodelabDto::getName).contains("CodelabTest2");
+
     }
 }
