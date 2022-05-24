@@ -1,16 +1,14 @@
-package com.example.nntitylms.codelab.api.dto;
-
-import com.example.nntitylms.codelab.domain.CodelabStatus;
+package com.example.nntitylms.codelab.domain;
 
 import java.util.Objects;
 
-public class CodelabDto {
+public class Codelab {
 
     private final Long id;
     private final String name;
     private final CodelabStatus status;
 
-    public CodelabDto(Long id, String name, CodelabStatus status) {
+    public Codelab(Long id, String name, CodelabStatus status) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -32,21 +30,12 @@ public class CodelabDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CodelabDto that = (CodelabDto) o;
-        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && status == that.status;
+        Codelab codelab = (Codelab) o;
+        return Objects.equals(id, codelab.id) && Objects.equals(name, codelab.name) && status == codelab.status;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, status);
-    }
-
-    @Override
-    public String toString() {
-        return "CodelabDto{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                '}';
     }
 }
