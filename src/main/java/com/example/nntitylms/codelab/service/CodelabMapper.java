@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Component
 public class CodelabMapper {
     public CodelabDto toDto(Codelab codelab) {
-        return new CodelabDto(codelab.getId(), codelab.getName(), codelab.getStatus());
+        return new CodelabDto(codelab.getId(), codelab.getName());
     }
 
     public List<CodelabDto> toDto(List<Codelab> codelabList) {

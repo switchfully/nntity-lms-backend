@@ -26,8 +26,8 @@ class CodelabControllerTest {
     @Test
     void getAllCodelabs_CorrectlyReturningAllCodelabs() {
         List<CodelabDto> expectedCodelabList = Lists.newArrayList(
-                new CodelabDto(1L, "Codelab01", CodelabStatus.DONE),
-                new CodelabDto(2L, "Codelab02", CodelabStatus.BUSY)
+                new CodelabDto(1L, "Codelab01"),
+                new CodelabDto(2L, "Codelab02")
         );
 
         List<CodelabDto> actualCodelabList = RestAssured

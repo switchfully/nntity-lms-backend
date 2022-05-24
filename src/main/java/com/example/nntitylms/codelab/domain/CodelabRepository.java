@@ -13,8 +13,8 @@ public class CodelabRepository {
     private final Map<Long, Codelab> codelabList = new HashMap<>();
 
     public CodelabRepository() {
-        codelabList.put(1L, new Codelab(1L, "Codelab01", CodelabStatus.DONE));
-        codelabList.put(2L, new Codelab(2L, "Codelab02", CodelabStatus.BUSY));
+        codelabList.put(1L, new Codelab(1L, "Codelab01"));
+        codelabList.put(2L, new Codelab(2L, "Codelab02"));
     }
 
     public List<Codelab> findAll() {
