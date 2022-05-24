@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -25,10 +26,6 @@ class CodelabControllerTest {
 
     @Test
     void getAllCodelabs_CorrectlyReturningAllCodelabs() {
-        List<CodelabDto> expectedCodelabList = Lists.newArrayList(
-                new CodelabDto(3L, "CodelabTest1"),
-                new CodelabDto(4L, "CodelabTest2")
-        );
 
         List<CodelabDto> actualCodelabList = RestAssured
                 .given()
@@ -49,4 +46,32 @@ class CodelabControllerTest {
         Assertions.assertThat(actualCodelabList).extracting(CodelabDto::getName).contains("CodelabTest2");
 
     }
+
+//    @Test
+//    void getAllCodelabs_CorrectlyReturningAllCodelabStatusses() {
+//
+//        List<CodelabDto> actualCodelabList = RestAssured
+//                .given()
+//                .baseUri("http://localhost")
+//                .port(port)
+//                .when()
+//                .contentType(ContentType.JSON)
+//                .get("/codelabs")
+//                .then()
+//                .assertThat()
+//                .statusCode(HttpStatus.OK.value())
+//                .extract()
+//                .body()
+//                .jsonPath()
+//                .getList(".", CodelabDto.class);
+//
+//        CodelabStatus status1 = actualCodelabList.stream()
+//                .filter(codelab -> codelab.getName().equals("CodelabTest1"))
+//                .map(codelab -> codelab.getStatus())
+//                .toList()
+//                .get(0);
+//
+//        Assertions.assertThat(status1).isEqualTo(CodelabStatus.TESTING);
+//
+//    }
 }
