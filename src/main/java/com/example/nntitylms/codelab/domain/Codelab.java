@@ -1,14 +1,24 @@
 package com.example.nntitylms.codelab.domain;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "CODELAB")
 public class Codelab {
 
-    private final Long id;
-    private final String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "codelab_seq")
+    @SequenceGenerator(name = "codelab_seq", sequenceName = "codelab_seq", allocationSize = 1)
+    private Long id;
 
-    public Codelab(Long id, String name) {
-        this.id = id;
+    @Column(name = "NAME")
+    private String name;
+
+    public Codelab() {
+    }
+
+    public Codelab(String name) {
         this.name = name;
     }
 

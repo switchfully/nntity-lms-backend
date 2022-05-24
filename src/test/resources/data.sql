@@ -9,11 +9,11 @@ VALUES (
 INSERT INTO CODELAB (id, name)
 VALUES (
            nextval('codelab_seq'),
-        'codelabTest1'
+        'CodelabTest1'
        );
 
 INSERT INTO CODELAB (id, name)
 VALUES (
            nextval('codelab_seq'),
-           'codelabTest2'
+           'CodelabTest2'
        );
