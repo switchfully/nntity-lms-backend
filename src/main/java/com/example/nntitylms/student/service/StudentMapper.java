@@ -1,7 +1,7 @@
-package com.example.nntitylms.Student.service;
+package com.example.nntitylms.student.service;
 
-import com.example.nntitylms.Student.api.dto.StudentSessionDto;
-import com.example.nntitylms.Student.domain.Student;
+import com.example.nntitylms.student.api.dto.StudentSessionDto;
+import com.example.nntitylms.student.domain.Student;
 import org.springframework.stereotype.Component;
 
 @Component

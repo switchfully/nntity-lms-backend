@@ -1,9 +1,9 @@
-package com.example.nntitylms.Student.api;
+package com.example.nntitylms.student.api;
 
-import com.example.nntitylms.Student.api.dto.StudentSessionDto;
-import com.example.nntitylms.Student.domain.Student;
-import com.example.nntitylms.Student.domain.StudentRepository;
-import com.example.nntitylms.Student.service.StudentService;
+import com.example.nntitylms.student.api.dto.StudentSessionDto;
+import com.example.nntitylms.student.domain.Student;
+import com.example.nntitylms.student.domain.StudentRepository;
+import com.example.nntitylms.student.service.StudentService;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

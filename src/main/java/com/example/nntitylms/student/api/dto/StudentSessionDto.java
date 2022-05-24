@@ -1,4 +1,4 @@
-package com.example.nntitylms.Student.api.dto;
+package com.example.nntitylms.student.api.dto;
 
 import java.util.Objects;
 import java.util.UUID;

@@ -1,7 +1,7 @@
-package com.example.nntitylms.Student.api;
+package com.example.nntitylms.student.api;
 
-import com.example.nntitylms.Student.api.dto.StudentSessionDto;
-import com.example.nntitylms.Student.service.StudentService;
+import com.example.nntitylms.student.api.dto.StudentSessionDto;
+import com.example.nntitylms.student.service.StudentService;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;

@@ -1,4 +1,4 @@
-package com.example.nntitylms.Student.domain;
+package com.example.nntitylms.student.domain;
 
 import javax.persistence.*;
 import java.util.UUID;

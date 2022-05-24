@@ -1,8 +1,8 @@
-package com.example.nntitylms.Student.service;
+package com.example.nntitylms.student.service;
 
-import com.example.nntitylms.Student.api.dto.StudentSessionDto;
-import com.example.nntitylms.Student.domain.Student;
-import com.example.nntitylms.Student.domain.StudentRepository;
+import com.example.nntitylms.student.api.dto.StudentSessionDto;
+import com.example.nntitylms.student.domain.Student;
+import com.example.nntitylms.student.domain.StudentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
