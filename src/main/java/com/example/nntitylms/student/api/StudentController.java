@@ -17,6 +17,7 @@ public class StudentController {
         this.studentService = studentService;
     }
 
+
     @GetMapping(params = {"email", "password"}, produces = APPLICATION_JSON_VALUE)
     StudentSessionDto loginStudent(@RequestParam String email, @RequestParam String password) {
         return studentService.loginStudent(email, password);

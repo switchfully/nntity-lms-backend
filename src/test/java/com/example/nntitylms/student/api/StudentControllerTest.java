@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
@@ -22,6 +23,7 @@ import static org.springframework.http.HttpStatus.OK;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase
+@ActiveProfiles("disable-keycloak")
 class StudentControllerTest {
 
     @LocalServerPort
@@ -36,9 +38,9 @@ class StudentControllerTest {
     @Test
     void givenEmailAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
         //  GIVEN
-        Student student = studentRepository.findByEmail("Tarzan@Jungle.com");
+        Student student = studentRepository.findByEmail("tarzan@jungle.com");
 
-        StudentSessionDto expectedStudentSession = new StudentSessionDto(UUID.fromString("ce330ca0-d83a-11ec-9d64-0242ac120002"), "Tarzan");
+        StudentSessionDto expectedStudentSession = new StudentSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
         //  WHEN
         StudentSessionDto actualStudentSession = RestAssured
                 .given()
@@ -60,7 +62,7 @@ class StudentControllerTest {
     void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequestAndCorrectErrorIsThrown() {
         //  GIVEN
         String incorrectEmail = "Tarsan@Jungle.com";
-        String correctPassword = "JaneIsTheLoveOfMyLife";
+        String correctPassword = "Jane";
         //  WHEN
         RestAssured
                 .given()

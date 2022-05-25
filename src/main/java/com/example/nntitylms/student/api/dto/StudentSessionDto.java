@@ -6,10 +6,12 @@ import java.util.UUID;
 public class StudentSessionDto {
     private final UUID id;
     private final String displayName;
+    private final String accessToken;
 
-    public StudentSessionDto(UUID id, String displayName) {
+    public StudentSessionDto(UUID id, String displayName, String accessToken) {
         this.id = id;
         this.displayName = displayName;
+        this.accessToken = accessToken;
     }
 
     public UUID getId() {
@@ -18,6 +20,10 @@ public class StudentSessionDto {
 
     public String getDisplayName() {
         return displayName;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
     }
 
     @Override

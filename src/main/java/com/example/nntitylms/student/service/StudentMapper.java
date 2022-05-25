@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class StudentMapper {
 
-    public StudentSessionDto toSessionDto(Student foundStudent) {
+    public StudentSessionDto toSessionDto(Student foundStudent, String accessToken) {
         return new StudentSessionDto(
                 foundStudent.getId(),
-                foundStudent.getDisplayName()
-        );
+                foundStudent.getDisplayName(),
+                accessToken);
     }
 }
