@@ -1,4 +1,4 @@
-package com.example.nntitylms.Security;
+package com.example.nntitylms.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -17,8 +17,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                 .and()
+//                temporary workaround
                 .authorizeRequests().antMatchers("/students").permitAll()
                 .and()
+                .authorizeRequests().antMatchers("/student-codelabs/*").permitAll()
+                .and()
+//                end temporary workaround
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()

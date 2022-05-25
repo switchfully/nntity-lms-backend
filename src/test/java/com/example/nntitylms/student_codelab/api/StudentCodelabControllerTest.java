@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -23,6 +24,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase
+@ActiveProfiles("disable-keycloak")
 class StudentCodelabControllerTest {
 
     private static final UUID TEST_STUDENT_ID = UUID.fromString("bd39d3fc-d101-4865-aa2e-bac55a5d4321");

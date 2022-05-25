@@ -1,4 +1,4 @@
-package com.example.nntitylms.Security;
+package com.example.nntitylms.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

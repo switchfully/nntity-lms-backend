@@ -3,7 +3,7 @@ package com.example.nntitylms.student.service;
 import com.example.nntitylms.student.api.dto.StudentSessionDto;
 import com.example.nntitylms.student.domain.Student;
 import com.example.nntitylms.student.domain.StudentRepository;
-import com.example.nntitylms.Security.KeycloakTokenProvider;
+import com.example.nntitylms.security.KeycloakTokenProvider;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
