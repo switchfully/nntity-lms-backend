@@ -10,6 +10,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("student-codelabs")
+@CrossOrigin(origins = {"http://localhost:3000", "https://nntity-lms.netlify.app/"})
 public class StudentCodelabController {
 
     private final StudentCodelabService studentCodelabService;

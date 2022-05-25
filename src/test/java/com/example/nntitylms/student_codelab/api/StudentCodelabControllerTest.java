@@ -2,19 +2,23 @@ package com.example.nntitylms.student_codelab.api;
 
 import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
+import com.example.nntitylms.student_codelab.service.StudentCodelabService;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.http.ContentType.JSON;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -25,6 +29,9 @@ class StudentCodelabControllerTest {
 
     @LocalServerPort
     private int port;
+
+    @Autowired
+    StudentCodelabService studentCodelabService;
 
     @Test
     void getStudentCodelabs_provideCorrectCodelabsOfStudent() {
@@ -50,5 +57,26 @@ class StudentCodelabControllerTest {
         Assertions.assertThat(resultList).hasSameElementsAs(expectedList);
     }
 
+    @Test
+    void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequestAndCorrectErrorIsThrown() {
+        //  GIVEN
+        UUID unknownStudentId = UUID.randomUUID();
 
+        //  WHEN
+        RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .contentType(JSON)
+                .get("/student-codelabs/" + unknownStudentId)
+                .then()
+                .assertThat()
+                .statusCode(BAD_REQUEST.value());
+
+//  THEN
+        Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudent(unknownStudentId));
+        Assertions.assertThat(thrown)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId +"\"");
+    }
 }

@@ -24,13 +24,14 @@ import static org.springframework.http.HttpStatus.OK;
 @AutoConfigureTestDatabase
 class StudentControllerTest {
 
-    @Autowired
-    StudentRepository studentRepository;
-
     @LocalServerPort
     private int port;
+
     @Autowired
     private StudentService studentService;
+
+    @Autowired
+    StudentRepository studentRepository;
 
     @Test
     void givenEmailAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
@@ -56,7 +57,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequest() {
+    void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequestAndCorrectErrorIsThrown() {
         //  GIVEN
         String incorrectEmail = "Tarsan@Jungle.com";
         String correctPassword = "JaneIsTheLoveOfMyLife";
@@ -81,7 +82,7 @@ class StudentControllerTest {
     }
 
     @Test
-    void givenWrongPassword_WhenLoginStudent_ThenReturnBadRequest() {
+    void givenWrongPassword_WhenLoginStudent_ThenReturnBadRequestAndCorrectErrorIsThrown() {
         //  GIVEN
         String correctEmail = "Tarzan@Jungle.com";
         String incorrectPassword = "dummyPassword";
