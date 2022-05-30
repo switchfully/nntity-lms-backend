@@ -2,7 +2,7 @@ package com.example.nntitylms.student_codelab.domain;
 
 import com.example.nntitylms.codelab.domain.Codelab;
 import com.example.nntitylms.codelab.domain.CodelabStatus;
-import com.example.nntitylms.student.domain.Student;
+import com.example.nntitylms.user.domain.User;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -18,7 +18,7 @@ public class StudentCodelab {
 
     @ManyToOne
     @JoinColumn(name = "FK_STUDENT_ID")
-    private Student student;
+    private User student;
 
     @ManyToOne
     @JoinColumn(name = "FK_CODELAB_ID")
@@ -31,7 +31,7 @@ public class StudentCodelab {
     public StudentCodelab() {
     }
 
-    public StudentCodelab(Student student, Codelab codelab, CodelabStatus status) {
+    public StudentCodelab(User student, Codelab codelab, CodelabStatus status) {
         this.student = student;
         this.codelab = codelab;
         this.status = status;
@@ -41,7 +41,7 @@ public class StudentCodelab {
         return id;
     }
 
-    public Student getStudent() {
+    public User getStudent() {
         return student;
     }
 

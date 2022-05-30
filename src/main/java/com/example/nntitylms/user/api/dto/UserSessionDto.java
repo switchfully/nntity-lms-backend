@@ -1,14 +1,14 @@
-package com.example.nntitylms.student.api.dto;
+package com.example.nntitylms.user.api.dto;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class StudentSessionDto {
+public class UserSessionDto {
     private final UUID id;
     private final String displayName;
     private final String accessToken;
 
-    public StudentSessionDto(UUID id, String displayName, String accessToken) {
+    public UserSessionDto(UUID id, String displayName, String accessToken) {
         this.id = id;
         this.displayName = displayName;
         this.accessToken = accessToken;
@@ -30,7 +30,7 @@ public class StudentSessionDto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        StudentSessionDto that = (StudentSessionDto) o;
+        UserSessionDto that = (UserSessionDto) o;
         return Objects.equals(id, that.id) && Objects.equals(displayName, that.displayName);
     }
 

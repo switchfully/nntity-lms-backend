@@ -1,11 +1,11 @@
-package com.example.nntitylms.student.domain;
+package com.example.nntitylms.user.domain;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
 @Table(name = "STUDENT")
-public class Student {
+public class User {
 
     @Id
     @GeneratedValue
@@ -20,10 +20,10 @@ public class Student {
     @Column(name = "PASSWORD")
     private String password;
 
-    public Student() {
+    public User() {
     }
 
-    public Student(String displayName, String email, String password) {
+    public User(String displayName, String email, String password) {
         this.displayName = displayName;
         this.email = email;
         this.password = password;

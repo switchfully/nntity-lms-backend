@@ -1,9 +1,9 @@
-package com.example.nntitylms.student.api;
+package com.example.nntitylms.user.api;
 
-import com.example.nntitylms.student.api.dto.StudentSessionDto;
-import com.example.nntitylms.student.domain.Student;
-import com.example.nntitylms.student.domain.StudentRepository;
-import com.example.nntitylms.student.service.StudentService;
+import com.example.nntitylms.user.api.dto.UserSessionDto;
+import com.example.nntitylms.user.domain.User;
+import com.example.nntitylms.user.domain.UserRepository;
+import com.example.nntitylms.user.service.UserService;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -24,25 +24,25 @@ import static org.springframework.http.HttpStatus.OK;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase
 @ActiveProfiles("disable-keycloak")
-class StudentControllerTest {
+class UserControllerTest {
 
     @LocalServerPort
     private int port;
 
     @Autowired
-    private StudentService studentService;
+    private UserService userService;
 
     @Autowired
-    StudentRepository studentRepository;
+    UserRepository userRepository;
 
     @Test
     void givenEmailAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
         //  GIVEN
-        Student student = studentRepository.findByEmail("tarzan@jungle.com");
+        User student = userRepository.findByEmail("tarzan@jungle.com");
 
-        StudentSessionDto expectedStudentSession = new StudentSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
+        UserSessionDto expectedStudentSession = new UserSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
         //  WHEN
-        StudentSessionDto actualStudentSession = RestAssured
+        UserSessionDto actualStudentSession = RestAssured
                 .given()
                 .baseUri("http://localhost")
                 .port(port)
@@ -53,7 +53,7 @@ class StudentControllerTest {
                 .then()
                 .assertThat()
                 .statusCode(OK.value())
-                .extract().as(StudentSessionDto.class);
+                .extract().as(UserSessionDto.class);
         //  THEN
         Assertions.assertThat(actualStudentSession).isEqualTo(expectedStudentSession);
     }
@@ -77,7 +77,7 @@ class StudentControllerTest {
                 .statusCode(BAD_REQUEST.value());
 
 //  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> studentService.loginStudent(incorrectEmail, correctPassword));
+        Throwable thrown = Assertions.catchThrowable(() -> userService.loginStudent(incorrectEmail, correctPassword));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
@@ -102,7 +102,7 @@ class StudentControllerTest {
                 .statusCode(BAD_REQUEST.value());
 
         //  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> studentService.loginStudent(correctEmail, incorrectPassword));
+        Throwable thrown = Assertions.catchThrowable(() -> userService.loginStudent(correctEmail, incorrectPassword));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
