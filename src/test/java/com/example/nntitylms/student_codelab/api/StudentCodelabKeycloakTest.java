@@ -24,7 +24,12 @@ class StudentCodelabKeycloakTest {
 
     @Test
     @WithMockUser(authorities = "VIEW_PERSONAL_OVERVIEW")
-    void name() throws Exception {
+    void SeeCodelabsAsUserWithViewPersonalOverviewAuthorization() throws Exception {
         mockMvc.perform(get("/student-codelabs/2812b4ba-90ea-497d-9185-16772cc475f6")).andExpect(status().isOk());
+    }
+
+    @Test
+    void SeeCodelabsAsUserWithoutAuthorization() throws Exception {
+        mockMvc.perform(get("/student-codelabs/2812b4ba-90ea-497d-9185-16772cc475f6")).andExpect(status().isUnauthorized());
     }
 }
