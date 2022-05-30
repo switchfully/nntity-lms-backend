@@ -38,24 +38,24 @@ class UserControllerTest {
     @Test
     void givenEmailAndPassword_WhenLoginStudent_ThenReturnStudentSessionDto() {
         //  GIVEN
-        User student = userRepository.findByEmail("tarzan@jungle.com");
+        User user = userRepository.findByEmail("tarzan@jungle.com");
 
-        UserSessionDto expectedStudentSession = new UserSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
+        UserSessionDto expectedUserSession = new UserSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
         //  WHEN
-        UserSessionDto actualStudentSession = RestAssured
+        UserSessionDto actualUserSession = RestAssured
                 .given()
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .queryParam("email", student.getEmail())
-                .queryParam("password", student.getPassword())
+                .queryParam("email", user.getEmail())
+                .queryParam("password", user.getPassword())
                 .get("/students")
                 .then()
                 .assertThat()
                 .statusCode(OK.value())
                 .extract().as(UserSessionDto.class);
         //  THEN
-        Assertions.assertThat(actualStudentSession).isEqualTo(expectedStudentSession);
+        Assertions.assertThat(actualUserSession).isEqualTo(expectedUserSession);
     }
 
     @Test
