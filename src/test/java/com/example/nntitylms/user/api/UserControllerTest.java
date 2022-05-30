@@ -49,7 +49,7 @@ class UserControllerTest {
                 .when()
                 .queryParam("email", user.getEmail())
                 .queryParam("password", user.getPassword())
-                .get("/students")
+                .get("/users")
                 .then()
                 .assertThat()
                 .statusCode(OK.value())
@@ -71,13 +71,13 @@ class UserControllerTest {
                 .when()
                 .queryParam("email", incorrectEmail)
                 .queryParam("password", correctPassword)
-                .get("/students")
+                .get("/users")
                 .then()
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());
 
 //  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> userService.loginStudent(incorrectEmail, correctPassword));
+        Throwable thrown = Assertions.catchThrowable(() -> userService.loginUser(incorrectEmail, correctPassword));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
@@ -96,13 +96,13 @@ class UserControllerTest {
                 .when()
                 .queryParam("email", correctEmail)
                 .queryParam("password", incorrectPassword)
-                .get("/students")
+                .get("/users")
                 .then()
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());
 
         //  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> userService.loginStudent(correctEmail, incorrectPassword));
+        Throwable thrown = Assertions.catchThrowable(() -> userService.loginUser(correctEmail, incorrectPassword));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");

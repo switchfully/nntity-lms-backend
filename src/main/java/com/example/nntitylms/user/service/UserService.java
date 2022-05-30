@@ -21,7 +21,7 @@ public class UserService {
         this.keycloakTokenProvider = keycloakCall;
     }
 
-    public UserSessionDto loginStudent(String email, String password) {
+    public UserSessionDto loginUser(String email, String password) {
         checkValidEmailAndPassword(email, password);
 
         User foundUser = userRepository.findByEmail(email);
