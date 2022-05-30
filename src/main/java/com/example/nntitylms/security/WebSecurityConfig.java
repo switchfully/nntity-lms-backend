@@ -17,10 +17,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .cors()
                 .and()
-//                temporary workaround
                 .authorizeRequests().antMatchers("/students").permitAll()
                 .and()
-//                end temporary workaround
                 .authorizeRequests()
                 .anyRequest()
                 .authenticated()
