@@ -20,8 +20,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                temporary workaround
                 .authorizeRequests().antMatchers("/students").permitAll()
                 .and()
-                .authorizeRequests().antMatchers("/student-codelabs/*").permitAll()
-                .and()
 //                end temporary workaround
                 .authorizeRequests()
                 .anyRequest()

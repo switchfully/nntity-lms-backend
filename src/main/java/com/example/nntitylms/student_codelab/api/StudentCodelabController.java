@@ -3,6 +3,7 @@ package com.example.nntitylms.student_codelab.api;
 import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import com.example.nntitylms.student_codelab.service.StudentCodelabService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class StudentCodelabController {
 
     @GetMapping(path = "/{studentId}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('VIEW_PERSONAL_OVERVIEW')")
     public List<StudentCodelabDto> getCodelabsOfStudent(@PathVariable UUID studentId) {
         return studentCodelabService.getCodelabsOfStudent(studentId);
     }
