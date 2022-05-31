@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface StudentCodelabRepository extends JpaRepository<StudentCodelab, Long> {
 
-    List<StudentCodelab> findByStudent(User student);
+    List<StudentCodelab> findByUser(User user);
 }
+

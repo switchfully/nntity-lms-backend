@@ -19,20 +19,20 @@ public class StudentCodelabService {
 
     private final StudentCodelabMapper studentCodelabMapper;
     private final StudentCodelabRepository studentCodelabRepository;
-    private final UserRepository studentRepository;
+    private final UserRepository userRepository;
 
-    public StudentCodelabService(StudentCodelabMapper studentCodelabMapper, StudentCodelabRepository studentCodelabRepository, UserRepository studentRepository) {
+    public StudentCodelabService(StudentCodelabMapper studentCodelabMapper, StudentCodelabRepository studentCodelabRepository, UserRepository userRepository) {
         this.studentCodelabMapper = studentCodelabMapper;
         this.studentCodelabRepository = studentCodelabRepository;
-        this.studentRepository = studentRepository;
+        this.userRepository = userRepository;
     }
 
     public List<StudentCodelabDto> getCodelabsOfStudent(UUID studentId) {
-        if (!studentRepository.existsById(studentId)) {
+        if (!userRepository.existsById(studentId)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No student found for id " + studentId);
         }
-        User foundStudent = studentRepository.findById(studentId).get();
-        List<StudentCodelab> foundCodelabs = studentCodelabRepository.findByStudent(foundStudent);
+        User foundStudent = userRepository.findById(studentId).get();
+        List<StudentCodelab> foundCodelabs = studentCodelabRepository.findByUser(foundStudent);
         return studentCodelabMapper.toDto(foundCodelabs);
     }
 }

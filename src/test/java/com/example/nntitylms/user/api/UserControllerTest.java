@@ -54,7 +54,7 @@ class UserControllerTest {
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .get("/users")
+                .post("/login")
                 .then()
                 .assertThat()
                 .statusCode(OK.value())
@@ -80,7 +80,7 @@ class UserControllerTest {
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .get("/users")
+                .post("/login")
                 .then()
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());
@@ -109,7 +109,7 @@ class UserControllerTest {
                 .baseUri("http://localhost")
                 .port(port)
                 .when()
-                .get("/users")
+                .post("/login")
                 .then()
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());

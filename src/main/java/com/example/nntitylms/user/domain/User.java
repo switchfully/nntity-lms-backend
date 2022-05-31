@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "STUDENT")
+@Table(name = "LMS_USER")
 public class User {
 
     @Id
@@ -20,13 +20,18 @@ public class User {
     @Column(name = "PASSWORD")
     private String password;
 
+    @Column(name = "ROLE")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     public User() {
     }
 
-    public User(String displayName, String email, String password) {
+    public User(String displayName, String email, String password, Role role) {
         this.displayName = displayName;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -43,5 +48,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

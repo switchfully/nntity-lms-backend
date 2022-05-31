@@ -18,7 +18,7 @@ public class StudentCodelab {
 
     @ManyToOne
     @JoinColumn(name = "FK_STUDENT_ID")
-    private User student;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "FK_CODELAB_ID")
@@ -31,8 +31,8 @@ public class StudentCodelab {
     public StudentCodelab() {
     }
 
-    public StudentCodelab(User student, Codelab codelab, CodelabStatus status) {
-        this.student = student;
+    public StudentCodelab(User user, Codelab codelab, CodelabStatus status) {
+        this.user = user;
         this.codelab = codelab;
         this.status = status;
     }
@@ -41,8 +41,8 @@ public class StudentCodelab {
         return id;
     }
 
-    public User getStudent() {
-        return student;
+    public User getUser() {
+        return user;
     }
 
     public Codelab getCodelab() {
@@ -58,11 +58,11 @@ public class StudentCodelab {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StudentCodelab that = (StudentCodelab) o;
-        return Objects.equals(student, that.student) && Objects.equals(codelab, that.codelab) && status == that.status;
+        return Objects.equals(user, that.user) && Objects.equals(codelab, that.codelab) && status == that.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(student, codelab, status);
+        return Objects.hash(user, codelab, status);
     }
 }
