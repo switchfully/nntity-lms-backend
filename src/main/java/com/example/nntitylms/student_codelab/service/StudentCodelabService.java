@@ -39,4 +39,8 @@ public class StudentCodelabService {
         List<StudentCodelab> foundCodelabs = studentCodelabRepository.findByUser(foundStudent);
         return studentCodelabMapper.toDto(foundCodelabs);
     }
+
+    public List<StudentCodelabDto> updateStudentCodelabs(UUID studentId, List<StudentCodelabDto> updatedCodelabs) {
+        return null;
+    }
 }

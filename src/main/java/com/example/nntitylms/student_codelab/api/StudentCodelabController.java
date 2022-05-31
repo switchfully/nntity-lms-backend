@@ -26,4 +26,10 @@ public class StudentCodelabController {
     public List<StudentCodelabDto> getCodelabsOfStudent(@PathVariable UUID studentId) {
         return studentCodelabService.getCodelabsOfStudent(studentId);
     }
+
+    @PutMapping(path = "/{studentId}", consumes = "application/json", produces = "application/json")
+    @ResponseStatus(HttpStatus.OK)
+    public List<StudentCodelabDto> updateStudentCodelabs(@PathVariable UUID studentId, @RequestBody List<StudentCodelabDto> updatedCodelabs) {
+        return studentCodelabService.updateStudentCodelabs(studentId, updatedCodelabs);
+    }
 }
