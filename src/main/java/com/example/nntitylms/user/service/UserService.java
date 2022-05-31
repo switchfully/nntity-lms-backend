@@ -1,5 +1,6 @@
 package com.example.nntitylms.user.service;
 
+import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
@@ -21,13 +22,11 @@ public class UserService {
         this.keycloakTokenProvider = keycloakCall;
     }
 
-    public UserSessionDto loginUser(String email, String password) {
-        checkValidEmailAndPassword(email, password);
+    public UserSessionDto loginUser(LoginUserDto loginUserDto) {
+        checkValidEmailAndPassword(loginUserDto.getEmail(), loginUserDto.getPassword());
 
-        User foundUser = userRepository.findByEmail(email);
-
+        User foundUser = userRepository.findByEmail(loginUserDto.getEmail());
         String userToken = keycloakTokenProvider.getToken(foundUser.getDisplayName(), foundUser.getPassword());
-
         return userMapper.toSessionDto(foundUser, userToken);
     }
 

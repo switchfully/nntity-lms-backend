@@ -1,5 +1,6 @@
 package com.example.nntitylms.user.api;
 
+import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.service.UserService;
 import org.springframework.web.bind.annotation.*;
@@ -18,9 +19,9 @@ public class UserController {
     }
 
 
-    @GetMapping(params = {"email", "password"}, produces = APPLICATION_JSON_VALUE)
-    UserSessionDto loginUser(@RequestParam String email, @RequestParam String password) {
-        return userService.loginUser(email, password);
+    @GetMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    UserSessionDto loginUser(@RequestBody LoginUserDto loginUserDto) {
+        return userService.loginUser(loginUserDto);
     }
 
 }
