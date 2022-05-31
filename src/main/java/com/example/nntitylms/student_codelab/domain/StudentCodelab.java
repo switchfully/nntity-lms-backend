@@ -53,6 +53,10 @@ public class StudentCodelab {
         return status;
     }
 
+    public void setStatus(CodelabStatus status) {
+        this.status = status;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -65,4 +69,5 @@ public class StudentCodelab {
     public int hashCode() {
         return Objects.hash(user, codelab, status);
     }
+
 }

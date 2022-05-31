@@ -31,16 +31,24 @@ public class StudentCodelabService {
     }
 
     public List<StudentCodelabDto> getCodelabsOfStudent(UUID studentId) {
-        if (!userRepository.existsById(studentId)) {
-            logger.error("No student found for id " + studentId);
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No student found for id " + studentId);
-        }
-        User foundStudent = userRepository.findById(studentId).get();
-        List<StudentCodelab> foundCodelabs = studentCodelabRepository.findByUser(foundStudent);
+        List<StudentCodelab> foundCodelabs = findCodelabsInRepository(studentId);
         return studentCodelabMapper.toDto(foundCodelabs);
     }
 
     public List<StudentCodelabDto> updateStudentCodelabs(UUID studentId, List<StudentCodelabDto> updatedCodelabs) {
-        return null;
+        List<StudentCodelab> studentCodelabsToUpdate = findCodelabsInRepository(studentId);
+        for (int index = 0; index < studentCodelabsToUpdate.size(); index++) {
+            studentCodelabsToUpdate.get(index).setStatus(updatedCodelabs.get(index).getStatus());
+        }
+        studentCodelabRepository.saveAll(studentCodelabsToUpdate);
+        return studentCodelabMapper.toDto(studentCodelabsToUpdate);
+    }
+
+    private List<StudentCodelab> findCodelabsInRepository(UUID studentId) {
+        if (!userRepository.existsById(studentId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No student found for id " + studentId);
+        }
+        User foundStudent = userRepository.findById(studentId).get();
+        return studentCodelabRepository.findByUser(foundStudent);
     }
 }

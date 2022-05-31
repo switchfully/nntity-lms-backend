@@ -39,7 +39,7 @@ class StudentCodelabControllerTest {
     void getStudentCodelabs_provideCorrectCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
                 new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.BUSY)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.BUSY)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -86,7 +86,7 @@ class StudentCodelabControllerTest {
     void updateStudentCodelabs_provideCorrectlyUpdatedCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
                 new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -114,7 +114,7 @@ class StudentCodelabControllerTest {
 
         List<StudentCodelabDto> expectedList = List.of(
                 new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
         );
 
         RestAssured.given()
