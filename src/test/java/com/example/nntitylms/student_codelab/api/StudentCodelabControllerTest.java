@@ -81,4 +81,57 @@ class StudentCodelabControllerTest {
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId +"\"");
     }
+
+    @Test
+    void updateStudentCodelabs_provideCorrectlyUpdatedCodelabsOfStudent() {
+        List<StudentCodelabDto> expectedList = List.of(
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
+        );
+
+        List<StudentCodelabDto> resultList = RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .body(expectedList)
+                .contentType(JSON)
+                .when()
+                .accept(JSON)
+                .put("/student-codelabs/" + TEST_STUDENT_ID)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .body()
+                .jsonPath()
+                .getList(".", StudentCodelabDto.class);
+
+        Assertions.assertThat(resultList).hasSameElementsAs(expectedList);
+    }
+
+    @Test
+    void updateStudentCodelabs_whenUnknownStudent_ThenReturnBadRequest() {
+        UUID unknownStudentId = UUID.randomUUID();
+
+        List<StudentCodelabDto> expectedList = List.of(
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
+        );
+
+        RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .body(expectedList)
+                .contentType(JSON)
+                .when()
+                .accept(JSON)
+                .put("/student-codelabs/" + unknownStudentId)
+                .then()
+                .assertThat()
+                .statusCode(BAD_REQUEST.value());
+
+        Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudent(unknownStudentId));
+        Assertions.assertThat(thrown)
+                .isInstanceOf(ResponseStatusException.class)
+                .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId +"\"");
+    }
 }
