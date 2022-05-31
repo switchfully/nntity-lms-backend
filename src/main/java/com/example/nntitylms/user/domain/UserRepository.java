@@ -1,4 +1,4 @@
-package com.example.nntitylms.student.domain;
+package com.example.nntitylms.user.domain;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,11 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface StudentRepository extends JpaRepository<Student, UUID> {
+public interface UserRepository extends JpaRepository<User, UUID> {
 
     boolean existsByEmail(String email);
 
-    Student findByEmail(String email);
+    User findByEmail(String email);
 
     boolean existsByEmailAndPassword(String email, String password);
 }

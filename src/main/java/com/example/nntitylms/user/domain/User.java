@@ -1,11 +1,11 @@
-package com.example.nntitylms.student.domain;
+package com.example.nntitylms.user.domain;
 
 import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table(name = "STUDENT")
-public class Student {
+@Table(name = "LMS_USER")
+public class User {
 
     @Id
     @GeneratedValue
@@ -20,13 +20,18 @@ public class Student {
     @Column(name = "PASSWORD")
     private String password;
 
-    public Student() {
+    @Column(name = "ROLE")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public User() {
     }
 
-    public Student(String displayName, String email, String password) {
+    public User(String displayName, String email, String password, Role role) {
         this.displayName = displayName;
         this.email = email;
         this.password = password;
+        this.role = role;
     }
 
     public UUID getId() {
@@ -43,5 +48,9 @@ public class Student {
 
     public String getPassword() {
         return password;
+    }
+
+    public Role getRole() {
+        return role;
     }
 }

@@ -13,7 +13,7 @@ public class StudentCodelabMapper {
     public StudentCodelabDto toDto (StudentCodelab codelab) {
         return new StudentCodelabDto(
                 codelab.getId(),
-                codelab.getStudent().getId(),
+                codelab.getUser().getId(),
                 codelab.getCodelab().getName(),
                 codelab.getStatus()
         );
