@@ -13,6 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import static org.springframework.http.HttpStatus.*;
+
 @Service
 public class UserService {
 
@@ -38,6 +40,8 @@ public class UserService {
 
     public UserIdDto registerStudent(RegisterStudentDto registerStudentDto) {
         User studentToRegister = userMapper.toUser(registerStudentDto);
+
+        CheckUniqueEmail(studentToRegister);
         userRepository.save(studentToRegister);
 
         return new UserIdDto(studentToRegister.getId());
@@ -46,11 +50,17 @@ public class UserService {
     private void checkValidEmailAndPassword(String email, String password) {
         if (!userRepository.existsByEmail(email)) {
             logger.error("Email Address does not exist");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
+            throw new ResponseStatusException(BAD_REQUEST, "Invalid credentials");
         }
         if (!userRepository.existsByEmailAndPassword(email, password)) {
             logger.error("email and password combination does not exist");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
+            throw new ResponseStatusException(BAD_REQUEST, "Invalid credentials");
+        }
+    }
+
+    private void CheckUniqueEmail(User user) {
+        if(userRepository.existsByEmail(user.getEmail())){
+            throw new ResponseStatusException(BAD_REQUEST, "An account already exist with this email address!");
         }
     }
 }

@@ -123,7 +123,6 @@ class UserControllerTest {
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
-
     }
 
     @Nested
@@ -160,7 +159,7 @@ class UserControllerTest {
         }
 
         @Test
-        void givenWrongUser_WhenRegisterUser_ThenBadRequest() {
+        void givenUserWithWrongData_WhenRegisterUser_ThenBadRequest() {
             //  GIVEN
             RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", null);
             //  WHEN
@@ -176,6 +175,30 @@ class UserControllerTest {
                     .then()
                     .assertThat()
                     .statusCode(BAD_REQUEST.value());
+        }
+
+        @Test
+        void givenUserWithSameEmailAsAPreexistingUser_WhenRegisterUser_ThenBadRequest() {
+            //  GIVEN
+            RegisterStudentDto studentWithSamePasswordAsAnother = new RegisterStudentDto("Cinderella", "tarzan@jungle.com", "FairyG0dm0ther!");
+            //  WHEN
+            RestAssured
+                    .given()
+                    .body(studentWithSamePasswordAsAnother)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/students")
+                    .then()
+                    .assertThat()
+                    .statusCode(BAD_REQUEST.value());
+            //  THEN
+            Throwable thrown = Assertions.catchThrowable(() -> userService.registerStudent(studentWithSamePasswordAsAnother));
+            Assertions.assertThat(thrown)
+                    .isInstanceOf(ResponseStatusException.class)
+                    .hasMessage("400 BAD_REQUEST \"An account already exist with this email address!\"");
         }
     }
 }
