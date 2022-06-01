@@ -1,5 +1,7 @@
 package com.example.nntitylms.user.api;
 
+import com.example.nntitylms.codelab.domain.CodelabStatus;
+import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.UserRepository;
@@ -11,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.http.ContentType.JSON;
@@ -120,5 +124,28 @@ class UserControllerTest {
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
 
+    }
+
+    @Test
+    void getStudentsProgress() {
+
+        List<StudentProgressDto> expectedList = List.of(
+                new StudentProgressDto( UUID.fromString( "2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2));
+
+        List<StudentProgressDto> resultList = RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .contentType(JSON)
+                .get("/progression-overview")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .body()
+                .jsonPath()
+                .getList(".", StudentProgressDto.class);
+
+        Assertions.assertThat(resultList).hasSameElementsAs(expectedList);
     }
 }
