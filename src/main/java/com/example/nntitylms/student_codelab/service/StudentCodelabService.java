@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,6 +34,7 @@ public class StudentCodelabService {
 
     public List<StudentCodelabDto> getCodelabsOfStudent(UUID studentId) {
         List<StudentCodelab> foundCodelabs = findCodelabsInRepository(studentId);
+        Collections.sort(foundCodelabs);
         return studentCodelabMapper.toDto(foundCodelabs);
     }
 

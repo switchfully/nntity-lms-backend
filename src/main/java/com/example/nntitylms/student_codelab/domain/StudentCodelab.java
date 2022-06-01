@@ -2,6 +2,7 @@ package com.example.nntitylms.student_codelab.domain;
 
 import com.example.nntitylms.codelab.domain.Codelab;
 import com.example.nntitylms.codelab.domain.CodelabStatus;
+import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import com.example.nntitylms.user.domain.User;
 
 import javax.persistence.*;
@@ -9,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "STUDENT_CODELAB")
-public class StudentCodelab {
+public class StudentCodelab implements Comparable<StudentCodelab> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_codelab_seq")
@@ -57,6 +58,8 @@ public class StudentCodelab {
         this.status = status;
     }
 
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,4 +73,8 @@ public class StudentCodelab {
         return Objects.hash(user, codelab, status);
     }
 
+    @Override
+    public int compareTo(StudentCodelab o) {
+        return (int) (this.id-o.id);
+    }
 }
