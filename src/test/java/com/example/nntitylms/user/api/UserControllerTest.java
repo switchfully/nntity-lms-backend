@@ -4,12 +4,13 @@ import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.RegisterStudentDto;
 import com.example.nntitylms.user.api.dto.UserIdDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
-import com.example.nntitylms.user.domain.Role;
 import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
 import com.example.nntitylms.user.service.UserService;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -125,32 +126,37 @@ class UserControllerTest {
 
     }
 
-    @Test
-    void givenCreateUser_WhenRegisterUser_ThenReturnId() {
-        //  GIVEN
-        RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyGodmother");
-        //  WHEN
-        UserIdDto studentIdCreated = RestAssured
-                .given()
-                .body(expectedStudent)
-                .accept(JSON)
-                .contentType(JSON)
-                .baseUri("http://localhost")
-                .port(port)
-                .when()
-                .post("/students")
-                .then()
-                .assertThat()
-                .statusCode(CREATED.value())
-                .extract().as(UserIdDto.class);
+    @Nested
+    @DisplayName("Register student tests")
+    class RegisterStudentTests {
 
-        //  THEN
-        Assertions.assertThat(studentIdCreated.getId()).isNotNull().isInstanceOf(UUID.class);
-        Assertions.assertThat(userRepository.existsById(studentIdCreated.getId())).isTrue();
-        User actualStudent = userRepository.findById(studentIdCreated.getId()).orElse(new User());
-        Assertions.assertThat(actualStudent.getDisplayName()).isEqualTo(expectedStudent.getDisplayName());
-        Assertions.assertThat(actualStudent.getPassword()).isEqualTo(expectedStudent.getPassword());
-        Assertions.assertThat(actualStudent.getEmail()).isEqualTo(expectedStudent.getEmail());
-        Assertions.assertThat(actualStudent.getRole()).isEqualTo(expectedStudent.getRole());
+        @Test
+        void givenCreateUser_WhenRegisterUser_ThenReturnId() {
+            //  GIVEN
+            RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyGodmother");
+            //  WHEN
+            UserIdDto studentIdCreated = RestAssured
+                    .given()
+                    .body(expectedStudent)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/students")
+                    .then()
+                    .assertThat()
+                    .statusCode(CREATED.value())
+                    .extract().as(UserIdDto.class);
+
+            //  THEN
+            Assertions.assertThat(studentIdCreated.getId()).isNotNull().isInstanceOf(UUID.class);
+            Assertions.assertThat(userRepository.existsById(studentIdCreated.getId())).isTrue();
+            User actualStudent = userRepository.findById(studentIdCreated.getId()).orElse(new User());
+            Assertions.assertThat(actualStudent.getDisplayName()).isEqualTo(expectedStudent.getDisplayName());
+            Assertions.assertThat(actualStudent.getPassword()).isEqualTo(expectedStudent.getPassword());
+            Assertions.assertThat(actualStudent.getEmail()).isEqualTo(expectedStudent.getEmail());
+            Assertions.assertThat(actualStudent.getRole()).isEqualTo(expectedStudent.getRole());
+        }
     }
 }
