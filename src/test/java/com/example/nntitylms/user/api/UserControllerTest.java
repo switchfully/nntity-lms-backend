@@ -133,7 +133,7 @@ class UserControllerTest {
         @Test
         void givenCreateUser_WhenRegisterUser_ThenReturnId() {
             //  GIVEN
-            RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyGodmother");
+            RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyG0dm0ther!");
             //  WHEN
             UserIdDto studentIdCreated = RestAssured
                     .given()
@@ -157,6 +157,25 @@ class UserControllerTest {
             Assertions.assertThat(actualStudent.getPassword()).isEqualTo(expectedStudent.getPassword());
             Assertions.assertThat(actualStudent.getEmail()).isEqualTo(expectedStudent.getEmail());
             Assertions.assertThat(actualStudent.getRole()).isEqualTo(expectedStudent.getRole());
+        }
+
+        @Test
+        void givenWrongUser_WhenRegisterUser_ThenBadRequest() {
+            //  GIVEN
+            RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", null);
+            //  WHEN
+            RestAssured
+                    .given()
+                    .body(expectedStudent)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/students")
+                    .then()
+                    .assertThat()
+                    .statusCode(BAD_REQUEST.value());
         }
     }
 }

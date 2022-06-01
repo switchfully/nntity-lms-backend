@@ -23,7 +23,7 @@ class RegisterStudentDtoTest {
     @Test
     void givenNullDisplayName_ThenViolationConstraintNotEmpty() {
         //GIVEN
-        RegisterStudentDto registerStudentDto = new RegisterStudentDto(null, "cinderella@disney.com", "FairyGodmother");
+        RegisterStudentDto registerStudentDto = new RegisterStudentDto(null, "cinderella@disney.com", "FairyG0dm0ther!");
         Set<ConstraintViolation<RegisterStudentDto>> violations = validator.validate(registerStudentDto);
         //THEN
         Assertions.assertThat(violations.isEmpty()).isFalse();
@@ -32,7 +32,7 @@ class RegisterStudentDtoTest {
     @Test
     void givenBlankDisplayName_ThenViolationConstraintNotEmpty() {
         //GIVEN
-        RegisterStudentDto registerStudentDto = new RegisterStudentDto("  ", "cinderella@disney.com", "FairyGodmother");
+        RegisterStudentDto registerStudentDto = new RegisterStudentDto("  ", "cinderella@disney.com", "FairyG0dm0ther!");
         Set<ConstraintViolation<RegisterStudentDto>> violations = validator.validate(registerStudentDto);
         //THEN
         Assertions.assertThat(violations.isEmpty()).isFalse();
@@ -41,7 +41,7 @@ class RegisterStudentDtoTest {
     @Test
     void givenNULLEmail_ThenViolationConstraintNotEmpty() {
         //GIVEN
-        RegisterStudentDto registerStudentDto = new RegisterStudentDto("Cinderella", null, "FairyGodmother");
+        RegisterStudentDto registerStudentDto = new RegisterStudentDto("Cinderella", null, "FairyG0dm0ther!");
         Set<ConstraintViolation<RegisterStudentDto>> violations = validator.validate(registerStudentDto);
         //THEN
         Assertions.assertThat(violations.isEmpty()).isFalse();
@@ -50,7 +50,7 @@ class RegisterStudentDtoTest {
     @Test
     void givenImproperFormatEmail_ThenViolationConstraintNotEmpty() {
         //GIVEN
-        RegisterStudentDto registerStudentDto = new RegisterStudentDto("Cinderella", "disney.com", "FairyGodmother");
+        RegisterStudentDto registerStudentDto = new RegisterStudentDto("Cinderella", "disney.com", "FairyG0dm0ther!");
         Set<ConstraintViolation<RegisterStudentDto>> violations = validator.validate(registerStudentDto);
         //THEN
         Assertions.assertThat(violations.isEmpty()).isFalse();

@@ -11,11 +11,12 @@ public class RegisterStudentDto {
 
     @NotBlank(message = "Display name is null or blank")
     private final String displayName;
-    @NotNull
-    @Email
+    @NotNull(message = "Email is null")
+    @Email(message = "Email is in a improper format")
     private final String email;
     @NotBlank(message = "Password is null or blank")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@$%^&(){}:;<>,.?/~_+-=|])[A-Za-z0-9!@$%^&(){}:;<>,.?/~_+-=|].{8,}$")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@$%^&(){}:;<>,.?/~_+-=|])[A-Za-z0-9!@$%^&(){}:;<>,.?/~_+-=|].{8,}$",
+            message = "The Password must be at least 8 characters long and contains at least 1 number, 1 special character, 1 uppercase letter and 1 lowercase letter")
     private final String password;
     private final Role role = Role.STUDENT;
 

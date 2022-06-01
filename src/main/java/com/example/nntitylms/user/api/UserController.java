@@ -8,6 +8,8 @@ import com.example.nntitylms.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -28,7 +30,7 @@ public class UserController {
 
     @PostMapping(path = "/students", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    UserIdDto registerStudent(@RequestBody RegisterStudentDto registerStudentDto) {
+    UserIdDto registerStudent(@RequestBody @Valid RegisterStudentDto registerStudentDto) {
         return userService.registerStudent(registerStudentDto);
     }
 }
