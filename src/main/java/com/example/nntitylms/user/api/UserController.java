@@ -8,8 +8,6 @@ import com.example.nntitylms.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -22,15 +20,15 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(path ="/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     UserSessionDto loginUser(@RequestBody LoginUserDto loginUserDto) {
         return userService.loginUser(loginUserDto);
     }
 
-    @PostMapping(path ="/students", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/students", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     UserIdDto registerStudent(@RequestBody RegisterStudentDto registerStudentDto) {
-        return new UserIdDto(UUID.randomUUID());
+        return userService.registerStudent(registerStudentDto);
     }
 }

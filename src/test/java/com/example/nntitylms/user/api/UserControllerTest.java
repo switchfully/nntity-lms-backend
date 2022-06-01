@@ -143,7 +143,14 @@ class UserControllerTest {
                 .assertThat()
                 .statusCode(CREATED.value())
                 .extract().as(UserIdDto.class);
+
         //  THEN
         Assertions.assertThat(studentIdCreated.getId()).isNotNull().isInstanceOf(UUID.class);
+        Assertions.assertThat(userRepository.existsById(studentIdCreated.getId())).isTrue();
+        User actualStudent = userRepository.findById(studentIdCreated.getId()).orElse(new User());
+        Assertions.assertThat(actualStudent.getDisplayName()).isEqualTo(expectedStudent.getDisplayName());
+        Assertions.assertThat(actualStudent.getPassword()).isEqualTo(expectedStudent.getPassword());
+        Assertions.assertThat(actualStudent.getEmail()).isEqualTo(expectedStudent.getEmail());
+        Assertions.assertThat(actualStudent.getRole()).isEqualTo(expectedStudent.getRole());
     }
 }

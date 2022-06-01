@@ -1,10 +1,12 @@
 package com.example.nntitylms.user.service;
 
+import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
+import com.example.nntitylms.user.api.dto.RegisterStudentDto;
+import com.example.nntitylms.user.api.dto.UserIdDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
-import com.example.nntitylms.security.KeycloakTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -32,6 +34,13 @@ public class UserService {
         String userToken = keycloakTokenProvider.getToken(foundUser.getDisplayName(), foundUser.getPassword());
         logger.info(loginUserDto.getEmail() + " successfully logged in");
         return userMapper.toSessionDto(foundUser, userToken);
+    }
+
+    public UserIdDto registerStudent(RegisterStudentDto registerStudentDto) {
+        User studentToRegister = userMapper.toUser(registerStudentDto);
+        userRepository.save(studentToRegister);
+
+        return new UserIdDto(studentToRegister.getId());
     }
 
     private void checkValidEmailAndPassword(String email, String password) {
