@@ -1,7 +1,11 @@
 package com.example.nntitylms.user.api;
 
 import com.example.nntitylms.user.api.dto.LoginUserDto;
+import com.example.nntitylms.user.api.dto.RegisterStudentDto;
+import com.example.nntitylms.user.api.dto.UserIdDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
+import com.example.nntitylms.user.domain.Role;
+import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
 import com.example.nntitylms.user.service.UserService;
 import io.restassured.RestAssured;
@@ -18,8 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 
 import static io.restassured.http.ContentType.JSON;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -120,5 +123,27 @@ class UserControllerTest {
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
 
+    }
+
+    @Test
+    void givenCreateUser_WhenRegisterUser_ThenReturnId() {
+        //  GIVEN
+        RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyGodmother");
+        //  WHEN
+        UserIdDto studentIdCreated = RestAssured
+                .given()
+                .body(expectedStudent)
+                .accept(JSON)
+                .contentType(JSON)
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .post("/students")
+                .then()
+                .assertThat()
+                .statusCode(CREATED.value())
+                .extract().as(UserIdDto.class);
+        //  THEN
+        Assertions.assertThat(studentIdCreated.getId()).isNotNull().isInstanceOf(UUID.class);
     }
 }
