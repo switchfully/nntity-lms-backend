@@ -129,8 +129,7 @@ class UserControllerTest {
     @Test
     void getStudentsProgress() {
 
-        List<StudentProgressDto> expectedList = List.of(
-                new StudentProgressDto( UUID.fromString( "2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2));
+        StudentProgressDto expectedStudentProgressDto = new StudentProgressDto( UUID.fromString( "2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2);
 
         List<StudentProgressDto> resultList = RestAssured.given()
                 .baseUri("http://localhost")
@@ -146,6 +145,6 @@ class UserControllerTest {
                 .jsonPath()
                 .getList(".", StudentProgressDto.class);
 
-        Assertions.assertThat(resultList).hasSameElementsAs(expectedList);
+        Assertions.assertThat(resultList).contains(expectedStudentProgressDto);
     }
 }

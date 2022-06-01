@@ -1,5 +1,6 @@
 package com.example.nntitylms.user.service;
 
+import com.example.nntitylms.user.api.StudentProgressDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.User;
 import org.springframework.stereotype.Component;
@@ -12,5 +13,9 @@ public class UserMapper {
                 user.getId(),
                 user.getDisplayName(),
                 accessToken);
+    }
+
+    public StudentProgressDto toStudentProgressDto(User student, int completedCodelabs, int totalCodelabs) {
+        return new StudentProgressDto(student.getId(), student.getDisplayName(), completedCodelabs, totalCodelabs);
     }
 }

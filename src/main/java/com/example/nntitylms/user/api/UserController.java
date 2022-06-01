@@ -6,6 +6,9 @@ import com.example.nntitylms.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.UUID;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -24,5 +27,9 @@ public class UserController {
         return userService.loginUser(loginUserDto);
     }
 
-
+    @GetMapping (path = "/progression-overview", produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.OK)
+    List<StudentProgressDto> getStudentsProgress() {
+        return userService.getStudentsProgress();
+    }
 }

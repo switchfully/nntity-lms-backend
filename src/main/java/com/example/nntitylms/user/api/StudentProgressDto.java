@@ -1,5 +1,6 @@
 package com.example.nntitylms.user.api;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class StudentProgressDto {
@@ -29,5 +30,18 @@ public class StudentProgressDto {
 
     public int getTotalCodelabs() {
         return totalCodelabs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof StudentProgressDto)) return false;
+        StudentProgressDto that = (StudentProgressDto) o;
+        return getCompletedCodelabs() == that.getCompletedCodelabs() && getTotalCodelabs() == that.getTotalCodelabs() && Objects.equals(getStudentId(), that.getStudentId()) && Objects.equals(getDisplayName(), that.getDisplayName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getStudentId(), getDisplayName(), getCompletedCodelabs(), getTotalCodelabs());
     }
 }
