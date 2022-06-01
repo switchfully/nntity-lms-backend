@@ -15,8 +15,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static io.restassured.http.ContentType.JSON;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -60,7 +62,31 @@ class StudentCodelabControllerTest {
     }
 
     @Test
-    void givenWrongEmail_WhenLoginStudent_ThenReturnBadRequestAndCorrectErrorIsThrown() {
+    void getStudentCodelabs_sortMethodWorksCorrectly() {
+        List<StudentCodelabDto> expectedList = List.of(
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.BUSY),
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE)
+        );
+
+        List<StudentCodelabDto> resultList = RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .contentType(JSON)
+                .get("/student-codelabs/" + TEST_STUDENT_ID)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .body()
+                .jsonPath()
+                .getList(".", StudentCodelabDto.class);
+
+        Assertions.assertThat(expectedList.stream().sorted().collect(Collectors.toList())).isEqualTo(resultList);
+    }
+
+    @Test
+    void givenWrongEmail_WhenGetStudentCodelabs_ThenReturnBadRequestAndCorrectErrorIsThrown() {
         //  GIVEN
         UUID unknownStudentId = UUID.randomUUID();
 

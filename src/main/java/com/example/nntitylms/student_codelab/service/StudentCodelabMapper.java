@@ -22,6 +22,7 @@ public class StudentCodelabMapper {
     public List<StudentCodelabDto> toDto(List<StudentCodelab> codelabList) {
         return codelabList.stream()
                 .map(this::toDto)
+                .sorted()
                 .collect(Collectors.toList());
     }
 }

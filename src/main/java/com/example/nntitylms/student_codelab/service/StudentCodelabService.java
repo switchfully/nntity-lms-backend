@@ -34,7 +34,6 @@ public class StudentCodelabService {
 
     public List<StudentCodelabDto> getCodelabsOfStudent(UUID studentId) {
         List<StudentCodelab> foundCodelabs = findCodelabsInRepository(studentId);
-        Collections.sort(foundCodelabs);
         return studentCodelabMapper.toDto(foundCodelabs);
     }
 

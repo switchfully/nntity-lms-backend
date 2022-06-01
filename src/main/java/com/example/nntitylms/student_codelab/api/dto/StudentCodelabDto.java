@@ -1,11 +1,12 @@
 package com.example.nntitylms.student_codelab.api.dto;
 
 import com.example.nntitylms.codelab.domain.CodelabStatus;
+import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class StudentCodelabDto {
+public class StudentCodelabDto implements Comparable<StudentCodelabDto> {
     private final Long id;
     private final UUID studentId;
     private final String codelabName;
@@ -55,5 +56,10 @@ public class StudentCodelabDto {
                 ", codelabId=" + codelabName +
                 ", status=" + status +
                 '}';
+    }
+
+    @Override
+    public int compareTo(StudentCodelabDto o) {
+        return (int) (this.id-o.id);
     }
 }

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "STUDENT_CODELAB")
-public class StudentCodelab implements Comparable<StudentCodelab> {
+public class StudentCodelab {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_codelab_seq")
@@ -73,8 +73,4 @@ public class StudentCodelab implements Comparable<StudentCodelab> {
         return Objects.hash(user, codelab, status);
     }
 
-    @Override
-    public int compareTo(StudentCodelab o) {
-        return (int) (this.id-o.id);
-    }
 }
