@@ -44,4 +44,14 @@ public class StudentProgressDto {
     public int hashCode() {
         return Objects.hash(getStudentId(), getDisplayName(), getCompletedCodelabs(), getTotalCodelabs());
     }
+
+    @Override
+    public String toString() {
+        return "StudentProgressDto{" +
+                "studentId=" + studentId +
+                ", displayName='" + displayName + '\'' +
+                ", completedCodelabs=" + completedCodelabs +
+                ", totalCodelabs=" + totalCodelabs +
+                '}';
+    }
 }

@@ -59,8 +59,11 @@ public class UserService {
 
     public List<StudentProgressDto> getStudentsProgress() {
         List<User> studentList = userRepository.findByRole(Role.STUDENT);
-        List<StudentProgressDto> studentProgressDtoList = new ArrayList<>();
+        return generateProgressDtoList(studentList);
+    }
 
+    private List<StudentProgressDto> generateProgressDtoList(List<User> studentList) {
+        List<StudentProgressDto> studentProgressDtoList = new ArrayList<>();
         for (User student : studentList) {
             List<StudentCodelab> studentCodelabList = studentCodelabRepository.findByUser(student);
             List<StudentCodelab> completedCodelabList = studentCodelabList.stream().filter(studentCodelab -> studentCodelab.getStatus().equals(CodelabStatus.DONE)).toList();
@@ -69,7 +72,6 @@ public class UserService {
             StudentProgressDto studentProgressDto = userMapper.toStudentProgressDto(student, completedCodelabs, totalCodelabs);
             studentProgressDtoList.add(studentProgressDto);
         }
-
         return studentProgressDtoList;
     }
 }
