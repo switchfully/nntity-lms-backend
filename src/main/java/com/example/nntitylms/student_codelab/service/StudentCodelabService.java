@@ -1,10 +1,10 @@
 package com.example.nntitylms.student_codelab.service;
 
-import com.example.nntitylms.user.domain.User;
-import com.example.nntitylms.user.domain.UserRepository;
 import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
+import com.example.nntitylms.user.domain.User;
+import com.example.nntitylms.user.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 

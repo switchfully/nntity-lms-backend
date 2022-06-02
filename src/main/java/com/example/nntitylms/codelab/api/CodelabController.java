@@ -1,7 +1,6 @@
 package com.example.nntitylms.codelab.api;
 
 import com.example.nntitylms.codelab.api.dto.CodelabDto;
-import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.codelab.service.CodelabService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

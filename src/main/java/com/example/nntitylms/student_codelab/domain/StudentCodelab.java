@@ -2,7 +2,6 @@ package com.example.nntitylms.student_codelab.domain;
 
 import com.example.nntitylms.codelab.domain.Codelab;
 import com.example.nntitylms.codelab.domain.CodelabStatus;
-import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import com.example.nntitylms.user.domain.User;
 
 import javax.persistence.*;

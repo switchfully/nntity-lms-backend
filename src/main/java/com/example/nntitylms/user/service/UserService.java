@@ -1,6 +1,7 @@
 package com.example.nntitylms.user.service;
 
 import com.example.nntitylms.codelab.domain.CodelabStatus;
+import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
 import com.example.nntitylms.user.api.StudentProgressDto;
@@ -9,7 +10,6 @@ import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.Role;
 import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
-import com.example.nntitylms.security.KeycloakTokenProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -67,7 +65,9 @@ public class UserService {
         List<StudentProgressDto> studentProgressDtoList = new ArrayList<>();
         for (User student : studentList) {
             List<StudentCodelab> studentCodelabList = studentCodelabRepository.findByUser(student);
-            List<StudentCodelab> completedCodelabList = studentCodelabList.stream().filter(studentCodelab -> studentCodelab.getStatus().equals(CodelabStatus.DONE)).toList();
+            List<StudentCodelab> completedCodelabList = studentCodelabList.stream()
+                    .filter(studentCodelab -> studentCodelab.getStatus().equals(CodelabStatus.DONE) || studentCodelab.getStatus().equals(CodelabStatus.FEEDBACK_NEEDED))
+                    .toList();
             int completedCodelabs = completedCodelabList.size();
             int totalCodelabs = studentCodelabList.size();
             StudentProgressDto studentProgressDto = userMapper.toStudentProgressDto(student, completedCodelabs, totalCodelabs);
