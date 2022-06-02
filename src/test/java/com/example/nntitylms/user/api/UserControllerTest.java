@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static io.restassured.http.ContentType.JSON;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
@@ -127,7 +128,7 @@ class UserControllerTest {
     }
 
     @Test
-    void getStudentsProgress() {
+    void getStudentsProgress_studentsProgressShownCorrectly() {
 
         StudentProgressDto expectedStudentProgressDto = new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2);
 
@@ -146,5 +147,30 @@ class UserControllerTest {
                 .getList(".", StudentProgressDto.class);
 
         Assertions.assertThat(resultList).contains(expectedStudentProgressDto);
+    }
+
+    @Test
+    void getStudentsProgress_correctlySortedByName() {
+        List<StudentProgressDto> expectedList = List.of(
+                new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2),
+                new StudentProgressDto(UUID.fromString("123e4567-e89b-12d3-a456-426614174002"), "Herbert", 0, 3),
+                new StudentProgressDto(UUID.fromString("bd39d3fc-d101-4865-aa2e-bac55a5d4321"), "Bob The Builder", 1, 2)
+        );
+
+        List<StudentProgressDto> resultList = RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .when()
+                .contentType(JSON)
+                .get("/progression-overview")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .body()
+                .jsonPath()
+                .getList(".", StudentProgressDto.class);
+
+        Assertions.assertThat(expectedList.stream().sorted().collect(Collectors.toList())).isEqualTo(resultList);
     }
 }

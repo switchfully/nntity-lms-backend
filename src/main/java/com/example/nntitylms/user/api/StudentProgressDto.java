@@ -3,7 +3,7 @@ package com.example.nntitylms.user.api;
 import java.util.Objects;
 import java.util.UUID;
 
-public class StudentProgressDto {
+public class StudentProgressDto implements Comparable<StudentProgressDto> {
     private final UUID studentId;
     private final String displayName;
     private final int completedCodelabs;
@@ -53,5 +53,10 @@ public class StudentProgressDto {
                 ", completedCodelabs=" + completedCodelabs +
                 ", totalCodelabs=" + totalCodelabs +
                 '}';
+    }
+
+    @Override
+    public int compareTo(StudentProgressDto o) {
+        return this.displayName.compareTo(o.displayName);
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -72,6 +73,7 @@ public class UserService {
             StudentProgressDto studentProgressDto = userMapper.toStudentProgressDto(student, completedCodelabs, totalCodelabs);
             studentProgressDtoList.add(studentProgressDto);
         }
+        Collections.sort(studentProgressDtoList);
         return studentProgressDtoList;
     }
 }
