@@ -43,6 +43,7 @@ public class UserService {
 
         CheckUniqueEmail(studentToRegister);
         userRepository.save(studentToRegister);
+        logger.info("Student save to the database.");
 
         return new UserIdDto(studentToRegister.getId());
     }
@@ -60,6 +61,7 @@ public class UserService {
 
     private void CheckUniqueEmail(User user) {
         if(userRepository.existsByEmail(user.getEmail())){
+            logger.error("An account already exist with this email address!");
             throw new ResponseStatusException(BAD_REQUEST, "An account already exist with this email address!");
         }
     }
