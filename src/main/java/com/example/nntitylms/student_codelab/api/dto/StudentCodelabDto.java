@@ -1,7 +1,6 @@
 package com.example.nntitylms.student_codelab.api.dto;
 
 import com.example.nntitylms.codelab.domain.CodelabStatus;
-import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 
 import java.util.Objects;
 import java.util.UUID;

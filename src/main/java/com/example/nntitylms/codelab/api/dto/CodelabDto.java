@@ -1,7 +1,5 @@
 package com.example.nntitylms.codelab.api.dto;
 
-import com.example.nntitylms.codelab.domain.CodelabStatus;
-
 import java.util.Objects;
 
 public class CodelabDto {

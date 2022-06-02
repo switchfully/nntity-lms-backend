@@ -3,7 +3,6 @@ package com.example.nntitylms.codelab.service;
 import com.example.nntitylms.codelab.api.dto.CodelabDto;
 import com.example.nntitylms.codelab.domain.Codelab;
 import com.example.nntitylms.codelab.domain.CodelabRepository;
-import com.example.nntitylms.codelab.domain.CodelabStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
