@@ -174,6 +174,8 @@ class UserControllerTest {
                 .getList(".", StudentProgressDto.class);
 
         Assertions.assertThat(expectedList.stream().sorted().collect(Collectors.toList())).isEqualTo(resultList);
+    }
+
     @Nested
     @DisplayName("Register student tests")
     class RegisterStudentTests {

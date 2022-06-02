@@ -5,7 +5,6 @@ import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
 import com.example.nntitylms.user.api.StudentProgressDto;
-import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.RegisterStudentDto;
 import com.example.nntitylms.user.api.dto.UserIdDto;
@@ -15,7 +14,6 @@ import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -34,7 +32,7 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final StudentCodelabRepository studentCodelabRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall, StudentCodelabRepository studentCodelabRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.keycloakTokenProvider = keycloakCall;
