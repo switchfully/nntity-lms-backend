@@ -12,8 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -36,9 +38,13 @@ public class StudentCodelabService {
     }
 
     public List<StudentCodelabDto> updateStudentCodelabs(UUID studentId, List<StudentCodelabDto> updatedCodelabs) {
+        Collections.sort(updatedCodelabs);
         List<StudentCodelab> studentCodelabsToUpdate = findCodelabsInRepository(studentId);
-        for (int index = 0; index < studentCodelabsToUpdate.size(); index++) {
-            studentCodelabsToUpdate.get(index).setStatus(updatedCodelabs.get(index).getStatus());
+        for (StudentCodelabDto studentCodelabToUpdate : updatedCodelabs) {
+            StudentCodelab codelab = studentCodelabsToUpdate.stream()
+                    .filter((studentCodelab -> studentCodelabToUpdate.getId().equals(studentCodelab.getId())))
+                    .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "unexpected error: no studentCodelab found for id " + studentCodelabToUpdate.getId()));
+            codelab.setStatus(studentCodelabToUpdate.getStatus());
         }
         studentCodelabRepository.saveAll(studentCodelabsToUpdate);
         return studentCodelabMapper.toDto(studentCodelabsToUpdate);
