@@ -1,11 +1,15 @@
 package com.example.nntitylms.user.api;
 
 import com.example.nntitylms.user.api.dto.LoginUserDto;
+import com.example.nntitylms.user.api.dto.RegisterStudentDto;
+import com.example.nntitylms.user.api.dto.UserIdDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 import java.util.List;
 
@@ -32,5 +36,11 @@ public class UserController {
     @PreAuthorize("hasAuthority('VIEW_STUDENTS_OVERVIEW')")
     List<StudentProgressDto> getStudentsProgress() {
         return userService.getStudentsProgress();
+    }
+
+    @PostMapping(path = "/students", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    UserIdDto registerStudent(@RequestBody @Valid RegisterStudentDto registerStudentDto) {
+        return userService.registerStudent(registerStudentDto);
     }
 }

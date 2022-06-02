@@ -5,7 +5,10 @@ import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
 import com.example.nntitylms.user.api.StudentProgressDto;
+import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
+import com.example.nntitylms.user.api.dto.RegisterStudentDto;
+import com.example.nntitylms.user.api.dto.UserIdDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.Role;
 import com.example.nntitylms.user.domain.User;
@@ -15,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import static org.springframework.http.HttpStatus.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +34,7 @@ public class UserService {
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final StudentCodelabRepository studentCodelabRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall, StudentCodelabRepository studentCodelabRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.keycloakTokenProvider = keycloakCall;
@@ -45,14 +50,31 @@ public class UserService {
         return userMapper.toSessionDto(foundUser, userToken);
     }
 
+    public UserIdDto registerStudent(RegisterStudentDto registerStudentDto) {
+        User studentToRegister = userMapper.toUser(registerStudentDto);
+
+        CheckUniqueEmail(studentToRegister);
+        userRepository.save(studentToRegister);
+        logger.info("Student save to the database.");
+
+        return new UserIdDto(studentToRegister.getId());
+    }
+
     private void checkValidEmailAndPassword(String email, String password) {
         if (!userRepository.existsByEmail(email)) {
             logger.error("Email Address does not exist");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
+            throw new ResponseStatusException(BAD_REQUEST, "Invalid credentials");
         }
         if (!userRepository.existsByEmailAndPassword(email, password)) {
             logger.error("email and password combination does not exist");
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid credentials");
+            throw new ResponseStatusException(BAD_REQUEST, "Invalid credentials");
+        }
+    }
+
+    private void CheckUniqueEmail(User user) {
+        if(userRepository.existsByEmail(user.getEmail())){
+            logger.error("An account already exist with this email address!");
+            throw new ResponseStatusException(BAD_REQUEST, "An account already exist with this email address!");
         }
     }
 

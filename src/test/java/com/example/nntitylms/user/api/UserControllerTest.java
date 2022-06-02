@@ -1,11 +1,16 @@
 package com.example.nntitylms.user.api;
 
 import com.example.nntitylms.user.api.dto.LoginUserDto;
+import com.example.nntitylms.user.api.dto.RegisterStudentDto;
+import com.example.nntitylms.user.api.dto.UserIdDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
+import com.example.nntitylms.user.domain.User;
 import com.example.nntitylms.user.domain.UserRepository;
 import com.example.nntitylms.user.service.UserService;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -21,8 +26,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static io.restassured.http.ContentType.JSON;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -170,5 +174,80 @@ class UserControllerTest {
                 .getList(".", StudentProgressDto.class);
 
         Assertions.assertThat(expectedList.stream().sorted().collect(Collectors.toList())).isEqualTo(resultList);
+    @Nested
+    @DisplayName("Register student tests")
+    class RegisterStudentTests {
+
+        @Test
+        void givenCreateUser_WhenRegisterUser_ThenReturnId() {
+            //  GIVEN
+            RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyG0dm0ther!");
+            //  WHEN
+            UserIdDto studentIdCreated = RestAssured
+                    .given()
+                    .body(expectedStudent)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/students")
+                    .then()
+                    .assertThat()
+                    .statusCode(CREATED.value())
+                    .extract().as(UserIdDto.class);
+
+            //  THEN
+            Assertions.assertThat(studentIdCreated.getId()).isNotNull().isInstanceOf(UUID.class);
+            Assertions.assertThat(userRepository.existsById(studentIdCreated.getId())).isTrue();
+            User actualStudent = userRepository.findById(studentIdCreated.getId()).orElse(new User());
+            Assertions.assertThat(actualStudent.getDisplayName()).isEqualTo(expectedStudent.getDisplayName());
+            Assertions.assertThat(actualStudent.getPassword()).isEqualTo(expectedStudent.getPassword());
+            Assertions.assertThat(actualStudent.getEmail()).isEqualTo(expectedStudent.getEmail());
+            Assertions.assertThat(actualStudent.getRole()).isEqualTo(expectedStudent.getRole());
+        }
+
+        @Test
+        void givenUserWithWrongData_WhenRegisterUser_ThenBadRequest() {
+            //  GIVEN
+            RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", null);
+            //  WHEN
+            RestAssured
+                    .given()
+                    .body(expectedStudent)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/students")
+                    .then()
+                    .assertThat()
+                    .statusCode(BAD_REQUEST.value());
+        }
+
+        @Test
+        void givenUserWithSameEmailAsAPreexistingUser_WhenRegisterUser_ThenBadRequest() {
+            //  GIVEN
+            RegisterStudentDto studentWithSamePasswordAsAnother = new RegisterStudentDto("Cinderella", "tarzan@jungle.com", "FairyG0dm0ther!");
+            //  WHEN
+            RestAssured
+                    .given()
+                    .body(studentWithSamePasswordAsAnother)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/students")
+                    .then()
+                    .assertThat()
+                    .statusCode(BAD_REQUEST.value());
+            //  THEN
+            Throwable thrown = Assertions.catchThrowable(() -> userService.registerStudent(studentWithSamePasswordAsAnother));
+            Assertions.assertThat(thrown)
+                    .isInstanceOf(ResponseStatusException.class)
+                    .hasMessage("400 BAD_REQUEST \"An account already exist with this email address!\"");
+        }
     }
 }
