@@ -104,7 +104,7 @@ class StudentCodelabControllerTest {
         Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudent(unknownStudentId));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
-                .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId +"\"");
+                .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId + "\"");
     }
 
     @Test
@@ -157,6 +157,6 @@ class StudentCodelabControllerTest {
         Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudent(unknownStudentId));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
-                .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId +"\"");
+                .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId + "\"");
     }
 }

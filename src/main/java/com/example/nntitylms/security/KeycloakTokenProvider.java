@@ -14,9 +14,9 @@ import java.util.Map;
 @Component
 public class KeycloakTokenProvider {
     private final Logger logger = LoggerFactory.getLogger(KeycloakTokenProvider.class);
-        @Value("${keycloak.resource}")
+    @Value("${keycloak.resource}")
     private String CLIENT_ID;
-        @Value("${keycloak.credentials.secret}")
+    @Value("${keycloak.credentials.secret}")
     private String CLIENT_SECRET;
     private static final String GRANT_TYPE = "password";
 

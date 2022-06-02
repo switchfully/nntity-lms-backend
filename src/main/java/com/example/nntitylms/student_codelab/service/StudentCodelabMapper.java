@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Component
 public class StudentCodelabMapper {
 
-    public StudentCodelabDto toDto (StudentCodelab codelab) {
+    public StudentCodelabDto toDto(StudentCodelab codelab) {
         return new StudentCodelabDto(
                 codelab.getId(),
                 codelab.getUser().getId(),

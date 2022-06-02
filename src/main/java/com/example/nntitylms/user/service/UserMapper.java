@@ -26,6 +26,6 @@ public class UserMapper {
                 registerStudentDto.getEmail(),
                 registerStudentDto.getPassword(),
                 registerStudentDto.getRole()
-                );
+        );
     }
 }

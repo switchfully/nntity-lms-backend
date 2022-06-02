@@ -59,6 +59,6 @@ public class StudentCodelabDto implements Comparable<StudentCodelabDto> {
 
     @Override
     public int compareTo(StudentCodelabDto o) {
-        return (int) (this.id-o.id);
+        return (int) (this.id - o.id);
     }
 }

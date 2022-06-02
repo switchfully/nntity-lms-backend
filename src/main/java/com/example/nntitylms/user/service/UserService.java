@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import static org.springframework.http.HttpStatus.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 public class UserService {
@@ -70,7 +70,7 @@ public class UserService {
     }
 
     private void CheckUniqueEmail(User user) {
-        if(userRepository.existsByEmail(user.getEmail())){
+        if (userRepository.existsByEmail(user.getEmail())) {
             logger.error("An account already exist with this email address!");
             throw new ResponseStatusException(BAD_REQUEST, "An account already exist with this email address!");
         }

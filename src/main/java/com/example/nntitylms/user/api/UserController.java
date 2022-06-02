@@ -10,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -25,13 +24,13 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(path ="/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/login", consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     UserSessionDto loginUser(@RequestBody LoginUserDto loginUserDto) {
         return userService.loginUser(loginUserDto);
     }
 
-    @GetMapping (path = "/progression-overview", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/progression-overview", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('VIEW_STUDENTS_OVERVIEW')")
     List<StudentProgressDto> getStudentsProgress() {
