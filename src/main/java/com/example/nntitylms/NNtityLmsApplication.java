@@ -18,8 +18,6 @@ public class NNtityLmsApplication {
 
     /**
      * This creates a client that allows you send requests to keycloak as an admin
-     * <p>
-     * TODO: Change the account used from master admin to admin of a specific client
      */
     @Bean
     public Keycloak keycloak(@Value("${master.keycloak.username}") String adminUsername, @Value("${master.keycloak.password}") String adminPassword) {
@@ -36,5 +34,4 @@ public class NNtityLmsApplication {
                 )
                 .build();
     }
-
 }

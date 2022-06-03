@@ -1,6 +1,7 @@
 package com.example.nntitylms.user.service;
 
 import com.example.nntitylms.codelab.domain.CodelabStatus;
+import com.example.nntitylms.security.KeycloakService;
 import com.example.nntitylms.security.KeycloakTokenProvider;
 import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
@@ -31,12 +32,14 @@ public class UserService {
     private final KeycloakTokenProvider keycloakTokenProvider;
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final StudentCodelabRepository studentCodelabRepository;
+    private final KeycloakService keycloakService;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall, StudentCodelabRepository studentCodelabRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall, StudentCodelabRepository studentCodelabRepository, KeycloakService keycloakService) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.keycloakTokenProvider = keycloakCall;
         this.studentCodelabRepository = studentCodelabRepository;
+        this.keycloakService = keycloakService;
     }
 
     public UserSessionDto loginUser(LoginUserDto loginUserDto) {
@@ -52,6 +55,7 @@ public class UserService {
         User studentToRegister = userMapper.toUser(registerStudentDto);
 
         CheckUniqueEmail(studentToRegister);
+        keycloakService.addUser(registerStudentDto);
         userRepository.save(studentToRegister);
         logger.info("Student save to the database.");
 

@@ -1,24 +1,26 @@
 package com.example.nntitylms.security;
 
-import com.google.common.collect.Lists;
-import org.assertj.core.util.Lists;
+import com.example.nntitylms.user.api.dto.RegisterStudentDto;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
-import org.keycloak.admin.client.resource.ClientResource;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.RoleRepresentation;
+import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 @Service
 public class KeycloakService {
 
+    public static final String STUDENT_GROUP = "LMS-STUDENT";
     private final RealmResource realmResource;
     private final String clientID;
 
@@ -27,17 +29,17 @@ public class KeycloakService {
         this.realmResource = keycloak.realm(realmName);
     }
 
-    public void addUser(KeycloakUserDTO keycloakUserDTO) {
-        String createdUserId = createUser(keycloakUserDTO);
-        getUser(createdUserId).resetPassword(createCredentialRepresentation(keycloakUserDTO.password()));
-        addRole(getUser(createdUserId), keycloakUserDTO.role().getLabel());
+    public void addUser(RegisterStudentDto registerStudentDto) {
+        String createdUserId = createUser(registerStudentDto);
+        getUser(createdUserId).resetPassword(createCredentialRepresentation(registerStudentDto.getPassword()));
+//        addGroup(getUser(createdUserId));
     }
 
-    private String createUser(KeycloakUserDTO keycloakUserDTO) {
+    private String createUser(RegisterStudentDto registerStudentDto) {
         try {
-            return CreatedResponseUtil.getCreatedId(createUser(keycloakUserDTO.userName()));
+            return CreatedResponseUtil.getCreatedId(createUser(registerStudentDto.getDisplayName()));
         } catch (WebApplicationException exception) {
-            throw new UserAlreadyExistsException(keycloakUserDTO.userName());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Creating user in Keycloak failed");
         }
     }
 
@@ -49,13 +51,9 @@ public class KeycloakService {
         return passwordCredentials;
     }
 
-    private void addRole(UserResource user, String roleName) {
-        user.roles().clientLevel(getClientUUID()).add(Lists.newArrayList(getRole(roleName)));
-    }
-
-    private String getClientUUID() {
-        return realmResource.clients().findByClientId(clientID).get(0).getId();
-    }
+//    public void addGroup(UserResource user)  {
+//        user.. (getGroup(STUDENT_GROUP));
+//    }
 
     private Response createUser(String username) {
         return realmResource.users().create(createUserRepresentation(username));
@@ -65,18 +63,18 @@ public class KeycloakService {
         return realmResource.users().get(userId);
     }
 
-    private RoleRepresentation getRole(String roleToAdd) {
-        return getClientResource().roles().get(roleToAdd).toRepresentation();
-    }
-
-    private ClientResource getClientResource() {
-        return realmResource.clients().get(getClientUUID());
+    private GroupRepresentation getGroup(String groupToAdd) {
+        return realmResource.groups().groups()
+                .stream()
+                .filter(groupRepresentation -> groupRepresentation.getName().equals(groupToAdd))
+                .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found in Keycloak"));
     }
 
     private UserRepresentation createUserRepresentation(String username) {
         UserRepresentation user = new UserRepresentation();
         user.setUsername(username);
         user.setEnabled(true);
+        user.setGroups(List.of(STUDENT_GROUP));
         return user;
     }
 }
