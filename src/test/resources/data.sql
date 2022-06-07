@@ -5,12 +5,12 @@ VALUES ('2812b4ba-90ea-497d-9185-16772cc475f6',
         'Jane',
         'STUDENT');
 
-INSERT INTO CODELAB (id, name)
+INSERT INTO CODELAB (id, name, fk_course_id)
 VALUES (nextval('codelab_seq'),
         'CodelabTest1',
         1);
 
-INSERT INTO CODELAB (id, name)
+INSERT INTO CODELAB (id, name, fk_course_id)
 VALUES (nextval('codelab_seq'),
         'CodelabTest2',
         2);
