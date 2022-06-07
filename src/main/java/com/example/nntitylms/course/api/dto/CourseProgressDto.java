@@ -1,5 +1,7 @@
 package com.example.nntitylms.course.api.dto;
 
+import java.util.Objects;
+
 public class CourseProgressDto {
     private final Long id;
     private final String name;
@@ -27,5 +29,18 @@ public class CourseProgressDto {
 
     public int getTotalCodelabs() {
         return totalCodelabs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CourseProgressDto that = (CourseProgressDto) o;
+        return completedCodelabs == that.completedCodelabs && totalCodelabs == that.totalCodelabs && Objects.equals(id, that.id) && Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, completedCodelabs, totalCodelabs);
     }
 }
