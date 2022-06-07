@@ -2,17 +2,30 @@ package com.example.nntitylms.course.domain;
 
 import com.example.nntitylms.codelab.domain.Codelab;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table (name = "COURSE")
 public class Course {
-    private final Long id;
-    private final String name;
-    private final List<Codelab> codelabList;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
+    @SequenceGenerator(name = "course_seq", sequenceName = "course_seq", allocationSize = 1)
+    private Long id;
 
-    public Course(Long id, String name, List<Codelab> codelabList) {
-        this.id = id;
+    @Column(name = "NAME")
+    private String name;
+
+    @OneToMany
+    @JoinColumn (name = "FK_COURSE_ID")
+    private List<Codelab> codelabList;
+
+    public Course(String name, List<Codelab> codelabList) {
         this.name = name;
         this.codelabList = codelabList;
+    }
+
+    public Course() {
     }
 
     public Long getId() {
