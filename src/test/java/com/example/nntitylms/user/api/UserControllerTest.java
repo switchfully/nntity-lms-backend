@@ -1,5 +1,6 @@
 package com.example.nntitylms.user.api;
 
+import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.RegisterStudentDto;
 import com.example.nntitylms.user.api.dto.UserIdDto;
@@ -41,7 +42,10 @@ class UserControllerTest {
     private UserService userService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private StudentCodelabRepository studentCodelabRepository;
 
     @Test
     void givenStudentWithCorrectEmailAndPassword_WhenLoginUser_ThenReturnUserSessionDto() {
@@ -181,7 +185,7 @@ class UserControllerTest {
     class RegisterStudentTests {
 
         @Test
-        void givenCreateUser_WhenRegisterUser_ThenReturnId() {
+        void givenCreateUser_WhenRegisterUser_ThenReturnIdAndExactUserExistInDataBaseAndStudentCodelabsAssigned() {
             //  GIVEN
             RegisterStudentDto expectedStudent = new RegisterStudentDto("Cinderella", "cinderella@disney.com", "FairyG0dm0ther!");
             //  WHEN
@@ -201,12 +205,15 @@ class UserControllerTest {
 
             //  THEN
             Assertions.assertThat(studentIdCreated.getId()).isNotNull().isInstanceOf(UUID.class);
+
             Assertions.assertThat(userRepository.existsById(studentIdCreated.getId())).isTrue();
             User actualStudent = userRepository.findById(studentIdCreated.getId()).orElse(new User());
             Assertions.assertThat(actualStudent.getDisplayName()).isEqualTo(expectedStudent.getDisplayName());
             Assertions.assertThat(actualStudent.getPassword()).isEqualTo(expectedStudent.getPassword());
             Assertions.assertThat(actualStudent.getEmail()).isEqualTo(expectedStudent.getEmail());
             Assertions.assertThat(actualStudent.getRole()).isEqualTo(expectedStudent.getRole());
+
+            Assertions.assertThat(studentCodelabRepository.findByUser(actualStudent)).isNotEmpty();
         }
 
         @Test
