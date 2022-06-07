@@ -1,5 +1,7 @@
 package com.example.nntitylms.user.service;
 
+import com.example.nntitylms.codelab.domain.Codelab;
+import com.example.nntitylms.codelab.domain.CodelabRepository;
 import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.security.KeycloakService;
 import com.example.nntitylms.security.KeycloakTokenProvider;
@@ -16,6 +18,7 @@ import com.example.nntitylms.user.domain.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -25,21 +28,24 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
+@Transactional
 public class UserService {
 
+    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final KeycloakTokenProvider keycloakTokenProvider;
-    private final Logger logger = LoggerFactory.getLogger(UserService.class);
     private final StudentCodelabRepository studentCodelabRepository;
     private final KeycloakService keycloakService;
+    private final CodelabRepository codelabRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall, StudentCodelabRepository studentCodelabRepository, KeycloakService keycloakService) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, KeycloakTokenProvider keycloakCall, StudentCodelabRepository studentCodelabRepository, KeycloakService keycloakService, CodelabRepository codelabRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.keycloakTokenProvider = keycloakCall;
         this.studentCodelabRepository = studentCodelabRepository;
         this.keycloakService = keycloakService;
+        this.codelabRepository = codelabRepository;
     }
 
     public UserSessionDto loginUser(LoginUserDto loginUserDto) {
@@ -56,8 +62,12 @@ public class UserService {
 
         CheckUniqueEmail(studentToRegister);
         keycloakService.addUser(registerStudentDto);
+
         userRepository.save(studentToRegister);
-        logger.info("Student save to the database.");
+        logger.info("Student save to the database");
+
+        assignExistingCodelabs(studentToRegister);
+        logger.info("Existing codelabs assigned to the newly created student");
 
         return new UserIdDto(studentToRegister.getId());
     }
@@ -99,5 +109,20 @@ public class UserService {
         }
         Collections.sort(studentProgressDtoList);
         return studentProgressDtoList;
+    }
+
+    private void assignExistingCodelabs(User studentToRegister) {
+        List<Codelab> existingCodelabs = codelabRepository.findAll();
+        if(existingCodelabs.isEmpty()){
+            logger.warn("No codelab currently exists");
+            return;
+        }
+        List<StudentCodelab> newStudentCodelabList = new ArrayList<>();
+        for (Codelab codelab :
+                existingCodelabs) {
+            newStudentCodelabList.add(new StudentCodelab(studentToRegister, codelab, CodelabStatus.NOT_STARTED));
+        }
+        logger.info("Student-codelabs to save for the new student " + newStudentCodelabList);
+        studentCodelabRepository.saveAll(newStudentCodelabList);
     }
 }

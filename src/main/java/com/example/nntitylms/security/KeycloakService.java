@@ -6,8 +6,9 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
-import org.keycloak.representations.idm.GroupRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,23 +23,22 @@ public class KeycloakService {
 
     public static final String STUDENT_GROUP = "LMS-STUDENT";
     private final RealmResource realmResource;
-    private final String clientID;
+    private final Logger logger = LoggerFactory.getLogger(KeycloakService.class);
 
-    public KeycloakService(Keycloak keycloak, @Value("${keycloak.realm}") String realmName, @Value("${keycloak.resource}") String clientId) {
-        this.clientID = clientId;
+    public KeycloakService(Keycloak keycloak, @Value("${keycloak.realm}") String realmName) {
         this.realmResource = keycloak.realm(realmName);
     }
 
     public void addUser(RegisterStudentDto registerStudentDto) {
         String createdUserId = createUser(registerStudentDto);
         getUser(createdUserId).resetPassword(createCredentialRepresentation(registerStudentDto.getPassword()));
-//        addGroup(getUser(createdUserId));
     }
 
     private String createUser(RegisterStudentDto registerStudentDto) {
         try {
-            return CreatedResponseUtil.getCreatedId(createUser(registerStudentDto.getDisplayName()));
+            return CreatedResponseUtil.getCreatedId(createRealmUser(registerStudentDto.getDisplayName()));
         } catch (WebApplicationException exception) {
+            logger.error("Creating user in Keycloak failed :" + exception.getMessage());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Creating user in Keycloak failed");
         }
     }
@@ -48,26 +48,21 @@ public class KeycloakService {
         passwordCredentials.setTemporary(false);
         passwordCredentials.setType(CredentialRepresentation.PASSWORD);
         passwordCredentials.setValue(password);
+        logger.info("Initializing credential representation" + passwordCredentials);
         return passwordCredentials;
     }
 
-//    public void addGroup(UserResource user)  {
-//        user.. (getGroup(STUDENT_GROUP));
-//    }
-
-    private Response createUser(String username) {
+    private Response createRealmUser(String username) {
         return realmResource.users().create(createUserRepresentation(username));
     }
 
     private UserResource getUser(String userId) {
-        return realmResource.users().get(userId);
-    }
-
-    private GroupRepresentation getGroup(String groupToAdd) {
-        return realmResource.groups().groups()
-                .stream()
-                .filter(groupRepresentation -> groupRepresentation.getName().equals(groupToAdd))
-                .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Group not found in Keycloak"));
+        try {
+            return realmResource.users().get(userId);
+        } catch (WebApplicationException exception) {
+            logger.error("Getting user in Keycloak failed :" + exception.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Getting user in Keycloak failed");
+        }
     }
 
     private UserRepresentation createUserRepresentation(String username) {
@@ -75,6 +70,7 @@ public class KeycloakService {
         user.setUsername(username);
         user.setEnabled(true);
         user.setGroups(List.of(STUDENT_GROUP));
+        logger.info("Initializing user representation" + user);
         return user;
     }
 }
