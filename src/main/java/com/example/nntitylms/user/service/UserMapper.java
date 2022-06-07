@@ -1,10 +1,13 @@
 package com.example.nntitylms.user.service;
 
+import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.user.api.StudentProgressDto;
 import com.example.nntitylms.user.api.dto.RegisterStudentDto;
 import com.example.nntitylms.user.api.dto.UserSessionDto;
 import com.example.nntitylms.user.domain.User;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 @Component
 public class UserMapper {
@@ -16,8 +19,8 @@ public class UserMapper {
                 accessToken);
     }
 
-    public StudentProgressDto toStudentProgressDto(User student, int completedCodelabs, int totalCodelabs) {
-        return new StudentProgressDto(student.getId(), student.getDisplayName(), completedCodelabs, totalCodelabs);
+    public StudentProgressDto toStudentProgressDto(User student, Map<CodelabStatus,Long> codelabProgressMap, int totalCodelabs) {
+        return new StudentProgressDto(student.getId(), student.getDisplayName(), codelabProgressMap, totalCodelabs);
     }
 
     public User toUser(RegisterStudentDto registerStudentDto) {

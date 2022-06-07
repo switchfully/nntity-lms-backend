@@ -1,18 +1,21 @@
 package com.example.nntitylms.user.api;
 
+import com.example.nntitylms.codelab.domain.CodelabStatus;
+
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 public class StudentProgressDto implements Comparable<StudentProgressDto> {
     private final UUID studentId;
     private final String displayName;
-    private final int completedCodelabs;
+    private final Map<CodelabStatus, Long> codelabProgressMap;
     private final int totalCodelabs;
 
-    public StudentProgressDto(UUID studentId, String displayName, int completedCodelabs, int totalCodelabs) {
+    public StudentProgressDto(UUID studentId, String displayName, Map<CodelabStatus, Long> codelabProgressMap, int totalCodelabs) {
         this.studentId = studentId;
         this.displayName = displayName;
-        this.completedCodelabs = completedCodelabs;
+        this.codelabProgressMap = codelabProgressMap;
         this.totalCodelabs = totalCodelabs;
     }
 
@@ -24,8 +27,8 @@ public class StudentProgressDto implements Comparable<StudentProgressDto> {
         return displayName;
     }
 
-    public int getCompletedCodelabs() {
-        return completedCodelabs;
+    public Map<CodelabStatus, Long> getCodelabProgressMap() {
+        return codelabProgressMap;
     }
 
     public int getTotalCodelabs() {
@@ -35,14 +38,14 @@ public class StudentProgressDto implements Comparable<StudentProgressDto> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StudentProgressDto)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         StudentProgressDto that = (StudentProgressDto) o;
-        return getCompletedCodelabs() == that.getCompletedCodelabs() && getTotalCodelabs() == that.getTotalCodelabs() && Objects.equals(getStudentId(), that.getStudentId()) && Objects.equals(getDisplayName(), that.getDisplayName());
+        return totalCodelabs == that.totalCodelabs && Objects.equals(studentId, that.studentId) && Objects.equals(displayName, that.displayName) && Objects.equals(codelabProgressMap, that.codelabProgressMap);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getStudentId(), getDisplayName(), getCompletedCodelabs(), getTotalCodelabs());
+        return Objects.hash(studentId, displayName, codelabProgressMap, totalCodelabs);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class StudentProgressDto implements Comparable<StudentProgressDto> {
         return "StudentProgressDto{" +
                 "studentId=" + studentId +
                 ", displayName='" + displayName + '\'' +
-                ", completedCodelabs=" + completedCodelabs +
+                ", codelabProgressMap=" + codelabProgressMap +
                 ", totalCodelabs=" + totalCodelabs +
                 '}';
     }

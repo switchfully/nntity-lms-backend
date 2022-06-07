@@ -24,7 +24,10 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import static com.example.nntitylms.codelab.domain.CodelabStatus.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
@@ -99,12 +102,13 @@ public class UserService {
         List<StudentProgressDto> studentProgressDtoList = new ArrayList<>();
         for (User student : studentList) {
             List<StudentCodelab> studentCodelabList = studentCodelabRepository.findByUser(student);
-            List<StudentCodelab> completedCodelabList = studentCodelabList.stream()
-                    .filter(studentCodelab -> studentCodelab.getStatus().equals(CodelabStatus.DONE) || studentCodelab.getStatus().equals(CodelabStatus.FEEDBACK_NEEDED))
-                    .toList();
-            int completedCodelabs = completedCodelabList.size();
+
+            Map<CodelabStatus, Long> codelabProgressMap = studentCodelabList.stream()
+                    .filter(studentCodelab -> studentCodelab.getStatus() == DONE || studentCodelab.getStatus() == FEEDBACK_NEEDED || studentCodelab.getStatus() == STUCK)
+                    .collect(Collectors.groupingBy(StudentCodelab::getStatus, Collectors.counting()));
+
             int totalCodelabs = studentCodelabList.size();
-            StudentProgressDto studentProgressDto = userMapper.toStudentProgressDto(student, completedCodelabs, totalCodelabs);
+            StudentProgressDto studentProgressDto = userMapper.toStudentProgressDto(student, codelabProgressMap, totalCodelabs);
             studentProgressDtoList.add(studentProgressDto);
         }
         Collections.sort(studentProgressDtoList);
@@ -113,14 +117,14 @@ public class UserService {
 
     private void assignExistingCodelabs(User studentToRegister) {
         List<Codelab> existingCodelabs = codelabRepository.findAll();
-        if(existingCodelabs.isEmpty()){
+        if (existingCodelabs.isEmpty()) {
             logger.warn("No codelab currently exists");
             return;
         }
         List<StudentCodelab> newStudentCodelabList = new ArrayList<>();
         for (Codelab codelab :
                 existingCodelabs) {
-            newStudentCodelabList.add(new StudentCodelab(studentToRegister, codelab, CodelabStatus.NOT_STARTED));
+            newStudentCodelabList.add(new StudentCodelab(studentToRegister, codelab, NOT_STARTED));
         }
         logger.info("Student-codelabs to save for the new student " + newStudentCodelabList);
         studentCodelabRepository.saveAll(newStudentCodelabList);

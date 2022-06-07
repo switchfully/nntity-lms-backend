@@ -1,5 +1,6 @@
 package com.example.nntitylms.user.api;
 
+import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.RegisterStudentDto;
@@ -22,10 +23,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.example.nntitylms.codelab.domain.CodelabStatus.*;
 import static io.restassured.http.ContentType.JSON;
 import static org.springframework.http.HttpStatus.*;
 
@@ -47,137 +50,155 @@ class UserControllerTest {
     @Autowired
     private StudentCodelabRepository studentCodelabRepository;
 
-    @Test
-    void givenStudentWithCorrectEmailAndPassword_WhenLoginUser_ThenReturnUserSessionDto() {
-        //  GIVEN
-        String correctEmail = "tarzan@jungle.com";
-        String correctPassword = "Jane";
+    @Nested
+    @DisplayName("Login user tests")
+    class LoginUserTests {
 
-        LoginUserDto userToLogIn = new LoginUserDto(correctEmail, correctPassword);
+        @Test
+        void givenStudentWithCorrectEmailAndPassword_WhenLoginUser_ThenReturnUserSessionDto() {
+            //  GIVEN
+            String correctEmail = "tarzan@jungle.com";
+            String correctPassword = "Jane";
 
-        UserSessionDto expectedUserSession = new UserSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
-        //  WHEN
-        UserSessionDto actualUserSession = RestAssured
-                .given()
-                .body(userToLogIn)
-                .accept(JSON)
-                .contentType(JSON)
-                .baseUri("http://localhost")
-                .port(port)
-                .when()
-                .post("/login")
-                .then()
-                .assertThat()
-                .statusCode(OK.value())
-                .extract().as(UserSessionDto.class);
-        //  THEN
-        Assertions.assertThat(actualUserSession).isEqualTo(expectedUserSession);
-    }
+            LoginUserDto userToLogIn = new LoginUserDto(correctEmail, correctPassword);
 
-    @Test
-    void givenStudentWithWrongEmail_WhenLoginUser_ThenReturnBadRequestAndCorrectErrorIsThrown() {
-        //  GIVEN
-        String incorrectEmail = "tarsan@jungle.com";
-        String correctPassword = "Jane";
+            UserSessionDto expectedUserSession = new UserSessionDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", null);
+            //  WHEN
+            UserSessionDto actualUserSession = RestAssured
+                    .given()
+                    .body(userToLogIn)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(OK.value())
+                    .extract().as(UserSessionDto.class);
+            //  THEN
+            Assertions.assertThat(actualUserSession).isEqualTo(expectedUserSession);
+        }
 
-        LoginUserDto userIncorrectEmail = new LoginUserDto(incorrectEmail, correctPassword);
+        @Test
+        void givenStudentWithWrongEmail_WhenLoginUser_ThenReturnBadRequestAndCorrectErrorIsThrown() {
+            //  GIVEN
+            String incorrectEmail = "tarsan@jungle.com";
+            String correctPassword = "Jane";
 
-        //  WHEN
-        RestAssured
-                .given()
-                .body(userIncorrectEmail)
-                .accept(JSON)
-                .contentType(JSON)
-                .baseUri("http://localhost")
-                .port(port)
-                .when()
-                .post("/login")
-                .then()
-                .assertThat()
-                .statusCode(BAD_REQUEST.value());
+            LoginUserDto userIncorrectEmail = new LoginUserDto(incorrectEmail, correctPassword);
+
+            //  WHEN
+            RestAssured
+                    .given()
+                    .body(userIncorrectEmail)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(BAD_REQUEST.value());
 
 //  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> userService.loginUser(userIncorrectEmail));
-        Assertions.assertThat(thrown)
-                .isInstanceOf(ResponseStatusException.class)
-                .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
+            Throwable thrown = Assertions.catchThrowable(() -> userService.loginUser(userIncorrectEmail));
+            Assertions.assertThat(thrown)
+                    .isInstanceOf(ResponseStatusException.class)
+                    .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
+        }
+
+        @Test
+        void givenStudentWithWrongPassword_WhenLoginUser_ThenReturnBadRequestAndCorrectErrorIsThrown() {
+            //  GIVEN
+            String correctEmail = "tarzan@jungle.com";
+            String incorrectPassword = "dummyPassword";
+
+            LoginUserDto userIncorrectPassword = new LoginUserDto(correctEmail, incorrectPassword);
+
+            //  WHEN
+            RestAssured
+                    .given()
+                    .body(userIncorrectPassword)
+                    .accept(JSON)
+                    .contentType(JSON)
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .post("/login")
+                    .then()
+                    .assertThat()
+                    .statusCode(BAD_REQUEST.value());
+
+            //  THEN
+            Throwable thrown = Assertions.catchThrowable(() -> userService.loginUser(userIncorrectPassword));
+            Assertions.assertThat(thrown)
+                    .isInstanceOf(ResponseStatusException.class)
+                    .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
+
+        }
     }
 
-    @Test
-    void givenStudentWithWrongPassword_WhenLoginUser_ThenReturnBadRequestAndCorrectErrorIsThrown() {
-        //  GIVEN
-        String correctEmail = "tarzan@jungle.com";
-        String incorrectPassword = "dummyPassword";
+    @Nested
+    @DisplayName("Get student progress tests")
+    class GetStudentProgressTests {
 
-        LoginUserDto userIncorrectPassword = new LoginUserDto(correctEmail, incorrectPassword);
+        @Test
+        void getStudentsProgress_studentsProgressShownCorrectly() {
 
-        //  WHEN
-        RestAssured
-                .given()
-                .body(userIncorrectPassword)
-                .accept(JSON)
-                .contentType(JSON)
-                .baseUri("http://localhost")
-                .port(port)
-                .when()
-                .post("/login")
-                .then()
-                .assertThat()
-                .statusCode(BAD_REQUEST.value());
+            StudentProgressDto expectedStudentProgressDto = new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", new HashMap<>() {{
+                put(DONE, 1L);
+            }}, 2);
 
-        //  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> userService.loginUser(userIncorrectPassword));
-        Assertions.assertThat(thrown)
-                .isInstanceOf(ResponseStatusException.class)
-                .hasMessage("400 BAD_REQUEST \"Invalid credentials\"");
+            List<StudentProgressDto> resultList = RestAssured.given()
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .contentType(JSON)
+                    .get("/progression-overview")
+                    .then()
+                    .assertThat()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract()
+                    .body()
+                    .jsonPath()
+                    .getList(".", StudentProgressDto.class);
 
-    }
+            Assertions.assertThat(resultList).contains(expectedStudentProgressDto);
+        }
 
-    @Test
-    void getStudentsProgress_studentsProgressShownCorrectly() {
+        @Test
+        void getStudentsProgress_correctlySortedByName() {
+            List<StudentProgressDto> expectedList = List.of(
+                    new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", new HashMap<>() {{
+                        put(DONE, 1L);
+                    }}, 2),
+                    new StudentProgressDto(UUID.fromString("bc9091ba-c0b7-412b-ad7e-eb7665e06078"), "HarryPotter", new HashMap<>() {{
+                        put(DONE, 1L);
+                        put(FEEDBACK_NEEDED, 1L);
+                        put(STUCK, 1L);
+                    }}, 3)
+            );
 
-        StudentProgressDto expectedStudentProgressDto = new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2);
+            List<StudentProgressDto> resultList = RestAssured.given()
+                    .baseUri("http://localhost")
+                    .port(port)
+                    .when()
+                    .contentType(JSON)
+                    .get("/progression-overview")
+                    .then()
+                    .assertThat()
+                    .statusCode(HttpStatus.OK.value())
+                    .extract()
+                    .body()
+                    .jsonPath()
+                    .getList(".", StudentProgressDto.class);
 
-        List<StudentProgressDto> resultList = RestAssured.given()
-                .baseUri("http://localhost")
-                .port(port)
-                .when()
-                .contentType(JSON)
-                .get("/progression-overview")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .body()
-                .jsonPath()
-                .getList(".", StudentProgressDto.class);
+            Assertions.assertThat(expectedList.stream().sorted().collect(Collectors.toList())).isEqualTo(resultList);
+        }
 
-        Assertions.assertThat(resultList).contains(expectedStudentProgressDto);
-    }
-
-    @Test
-    void getStudentsProgress_correctlySortedByName() {
-        List<StudentProgressDto> expectedList = List.of(
-                new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", 1, 2),
-                new StudentProgressDto(UUID.fromString("123e4567-e89b-12d3-a456-426614174002"), "Herbert", 0, 3),
-                new StudentProgressDto(UUID.fromString("bd39d3fc-d101-4865-aa2e-bac55a5d4321"), "Bob The Builder", 1, 2)
-        );
-
-        List<StudentProgressDto> resultList = RestAssured.given()
-                .baseUri("http://localhost")
-                .port(port)
-                .when()
-                .contentType(JSON)
-                .get("/progression-overview")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .body()
-                .jsonPath()
-                .getList(".", StudentProgressDto.class);
-
-        Assertions.assertThat(expectedList.stream().sorted().collect(Collectors.toList())).isEqualTo(resultList);
     }
 
     @Nested
