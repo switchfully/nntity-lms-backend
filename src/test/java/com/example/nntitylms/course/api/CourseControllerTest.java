@@ -31,7 +31,7 @@ class CourseControllerTest {
     private static final UUID TEST_STUDENT_ID = UUID.fromString("bd39d3fc-d101-4865-aa2e-bac55a5d4321");
 
     @Test
-    void getCourseProgressPerStudent_provideCorrectResult() {
+    void getCourseProgress_provideCorrectResult() {
         List<CourseProgressDto> expectedList = List.of(
                 new CourseProgressDto(1L, "Composition", 1, 1),
                 new CourseProgressDto(2L, "Polymorphism", 1, 2)
