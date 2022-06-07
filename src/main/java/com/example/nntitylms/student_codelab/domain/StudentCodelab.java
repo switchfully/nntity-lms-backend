@@ -71,4 +71,13 @@ public class StudentCodelab {
         return Objects.hash(user, codelab, status);
     }
 
+    @Override
+    public String toString() {
+        return "StudentCodelab{" +
+                "id=" + id +
+                ", user=" + user +
+                ", codelab=" + codelab +
+                ", status=" + status +
+                '}';
+    }
 }
