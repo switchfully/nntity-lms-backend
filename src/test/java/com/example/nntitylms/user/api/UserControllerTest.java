@@ -149,7 +149,8 @@ class UserControllerTest {
 
             StudentProgressDto expectedStudentProgressDto = new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", new HashMap<>() {{
                 put(DONE, 1L);
-            }}, 2);
+                put(FEEDBACK_NEEDED, 1L);
+            }}, 3);
 
             List<StudentProgressDto> resultList = RestAssured.given()
                     .baseUri("http://localhost")
@@ -173,7 +174,8 @@ class UserControllerTest {
             List<StudentProgressDto> expectedList = List.of(
                     new StudentProgressDto(UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6"), "Tarzan", new HashMap<>() {{
                         put(DONE, 1L);
-                    }}, 2),
+                        put(FEEDBACK_NEEDED, 1L);
+                    }}, 3),
                     new StudentProgressDto(UUID.fromString("bc9091ba-c0b7-412b-ad7e-eb7665e06078"), "HarryPotter", new HashMap<>() {{
                         put(DONE, 1L);
                         put(FEEDBACK_NEEDED, 1L);
