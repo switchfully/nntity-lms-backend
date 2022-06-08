@@ -13,6 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/courses")
+@CrossOrigin(origins = {"http://localhost:3000", "https://nntity-lms.netlify.app/"})
 public class CourseController {
 
     private final CourseService courseService;
