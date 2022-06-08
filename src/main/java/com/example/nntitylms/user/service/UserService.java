@@ -124,7 +124,7 @@ public class UserService {
         List<StudentCodelab> newStudentCodelabList = new ArrayList<>();
         for (Codelab codelab :
                 existingCodelabs) {
-            newStudentCodelabList.add(new StudentCodelab(studentToRegister, codelab, NOT_STARTED));
+            newStudentCodelabList.add(new StudentCodelab(studentToRegister, codelab, NOT_STARTED, ""));
         }
         logger.info("Student-codelabs to save for the new student " + newStudentCodelabList);
         studentCodelabRepository.saveAll(newStudentCodelabList);

@@ -15,7 +15,8 @@ public class StudentCodelabMapper {
                 codelab.getId(),
                 codelab.getUser().getId(),
                 codelab.getCodelab().getName(),
-                codelab.getStatus()
+                codelab.getStatus(),
+                codelab.getComment()
         );
     }
 

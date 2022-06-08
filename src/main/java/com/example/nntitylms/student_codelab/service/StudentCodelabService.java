@@ -56,9 +56,10 @@ public class StudentCodelabService {
                     .filter((studentCodelab -> studentCodelabToUpdate.getId().equals(studentCodelab.getId())))
                     .findFirst().orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "unexpected error: no studentCodelab found for id " + studentCodelabToUpdate.getId()));
             codelab.setStatus(studentCodelabToUpdate.getStatus());
+            codelab.setComment(studentCodelabToUpdate.getComment());
         }
         studentCodelabRepository.saveAll(studentCodelabsToUpdate);
-        logger.info("Updated codelabs for studentId " + studentId);
+        logger.info("Updated codelabs (status or comment) for studentId " + studentId);
         return studentCodelabMapper.toDto(studentCodelabsToUpdate);
     }
 

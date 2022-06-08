@@ -29,6 +29,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 class StudentCodelabControllerTest {
 
     private static final UUID TEST_STUDENT_ID = UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6");
+    private static final String STUDENTCODELAB_COMMENT  = "COMMENT";
 
     private static final Long TEST_COURSE_ID = 2L;
 
@@ -41,8 +42,8 @@ class StudentCodelabControllerTest {
     @Test
     void getStudentCodelabs_provideCorrectCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY),
-                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY, "COMMENT2"),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED, "COMMENT3")
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -65,8 +66,8 @@ class StudentCodelabControllerTest {
     @Test
     void getStudentCodelabs_sortMethodWorksCorrectly() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY)
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED, "COMMENT3"),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY, "COMMENT2")
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -112,9 +113,9 @@ class StudentCodelabControllerTest {
     @Test
     void updateStudentCodelabs_provideCorrectlyUpdatedCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED),
-                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE, "COMMENT1"),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED, "COMMENT2"),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED, "COMMENT3")
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -141,9 +142,9 @@ class StudentCodelabControllerTest {
         UUID unknownStudentId = UUID.randomUUID();
 
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED),
-                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE, "COMMENT1"),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED, "COMMENT2"),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED, "COMMENT3")
         );
 
         RestAssured.given()
@@ -162,5 +163,32 @@ class StudentCodelabControllerTest {
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId + "\"");
+    }
+
+    @Test
+    void updateStudentCodelabsWithNewComment_provideCorrectlyUpdatedCodelabsOfStudent() {
+        List<StudentCodelabDto> expectedList = List.of(
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.STUCK, "Note changed for first codelab"),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED, "Note also changed for second codelab"),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED, "COMMENT3")
+        );
+
+        List<StudentCodelabDto> resultList = RestAssured.given()
+                .baseUri("http://localhost")
+                .port(port)
+                .body(expectedList)
+                .contentType(JSON)
+                .when()
+                .accept(JSON)
+                .put("/student-codelabs/" + TEST_STUDENT_ID)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .body()
+                .jsonPath()
+                .getList(".", StudentCodelabDto.class);
+
+        Assertions.assertThat(resultList).hasSameElementsAs(expectedList);
     }
 }

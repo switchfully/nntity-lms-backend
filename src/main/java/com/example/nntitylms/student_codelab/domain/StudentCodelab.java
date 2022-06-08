@@ -28,13 +28,17 @@ public class StudentCodelab {
     @Column(name = "PROGRESS")
     private CodelabStatus status;
 
+    @Column (name = "COMMENT")
+    private String comment;
+
     public StudentCodelab() {
     }
 
-    public StudentCodelab(User user, Codelab codelab, CodelabStatus status) {
+    public StudentCodelab(User user, Codelab codelab, CodelabStatus status, String comment) {
         this.user = user;
         this.codelab = codelab;
         this.status = status;
+        this.comment = comment;
     }
 
     public Long getId() {
@@ -57,18 +61,25 @@ public class StudentCodelab {
         this.status = status;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof StudentCodelab)) return false;
         StudentCodelab that = (StudentCodelab) o;
-        return Objects.equals(user, that.user) && Objects.equals(codelab, that.codelab) && status == that.status;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getUser(), that.getUser()) && Objects.equals(getCodelab(), that.getCodelab()) && getStatus() == that.getStatus() && Objects.equals(getComment(), that.getComment());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, codelab, status);
+        return Objects.hash(getId(), getUser(), getCodelab(), getStatus(), getComment());
     }
 
     @Override

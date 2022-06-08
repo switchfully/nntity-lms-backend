@@ -33,39 +33,45 @@ VALUES (nextval('codelab_seq'),
         'CodelabTest3',
         2);
 
-INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
+INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress, comment)
 VALUES (nextval('student_codelab_seq'),
         '2812b4ba-90ea-497d-9185-16772cc475f6',
         1,
-        'DONE');
+        'DONE',
+        'COMMENT1');
 
-INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
+INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress, comment)
 VALUES (nextval('student_codelab_seq'),
         '2812b4ba-90ea-497d-9185-16772cc475f6',
         2,
-        'BUSY');
+        'BUSY',
+        'COMMENT2');
 
 
-INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
+INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress, comment)
 VALUES (nextval('student_codelab_seq'),
         '2812b4ba-90ea-497d-9185-16772cc475f6',
         3,
-        'FEEDBACK_NEEDED');
+        'FEEDBACK_NEEDED',
+        'COMMENT3');
 
-INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
+INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress, comment)
 VALUES (nextval('student_codelab_seq'),
         'bc9091ba-c0b7-412b-ad7e-eb7665e06078',
         1,
-        'DONE');
+        'DONE',
+        'COMMENT4');
 
-INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
+INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress, comment)
 VALUES (nextval('student_codelab_seq'),
         'bc9091ba-c0b7-412b-ad7e-eb7665e06078',
         2,
-        'STUCK');
+        'STUCK',
+        'COMMENT5');
 
-INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
+INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress, comment)
 VALUES (nextval('student_codelab_seq'),
         'bc9091ba-c0b7-412b-ad7e-eb7665e06078',
         3,
-        'FEEDBACK_NEEDED');
+        'FEEDBACK_NEEDED',
+        'COMMENT6');

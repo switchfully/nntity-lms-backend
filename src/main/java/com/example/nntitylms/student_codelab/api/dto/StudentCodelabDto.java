@@ -10,12 +10,14 @@ public class StudentCodelabDto implements Comparable<StudentCodelabDto> {
     private final UUID studentId;
     private final String codelabName;
     private final CodelabStatus status;
+    private final String comment;
 
-    public StudentCodelabDto(Long id, UUID studentId, String codelabName, CodelabStatus status) {
+    public StudentCodelabDto(Long id, UUID studentId, String codelabName, CodelabStatus status, String codelabComment) {
         this.id = id;
         this.studentId = studentId;
         this.codelabName = codelabName;
         this.status = status;
+        this.comment = codelabComment;
     }
 
     public Long getId() {
@@ -34,17 +36,21 @@ public class StudentCodelabDto implements Comparable<StudentCodelabDto> {
         return status;
     }
 
+    public String getComment() {
+        return comment;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (!(o instanceof StudentCodelabDto)) return false;
         StudentCodelabDto that = (StudentCodelabDto) o;
-        return Objects.equals(studentId, that.studentId) && Objects.equals(codelabName, that.codelabName) && status == that.status;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getStudentId(), that.getStudentId()) && Objects.equals(getCodelabName(), that.getCodelabName()) && getStatus() == that.getStatus() && Objects.equals(getComment(), that.getComment());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(studentId, codelabName, status);
+        return Objects.hash(getId(), getStudentId(), getCodelabName(), getStatus(), getComment());
     }
 
     @Override
@@ -52,8 +58,9 @@ public class StudentCodelabDto implements Comparable<StudentCodelabDto> {
         return "StudentCodelabDto{" +
                 "id=" + id +
                 ", studentId=" + studentId +
-                ", codelabId=" + codelabName +
+                ", codelabName='" + codelabName + '\'' +
                 ", status=" + status +
+                ", comment='" + comment + '\'' +
                 '}';
     }
 
