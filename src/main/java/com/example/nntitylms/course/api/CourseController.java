@@ -3,6 +3,7 @@ package com.example.nntitylms.course.api;
 import com.example.nntitylms.course.api.dto.CourseProgressDto;
 import com.example.nntitylms.course.service.CourseService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class CourseController {
 
     @GetMapping(path = "{studentId}", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAuthority('VIEW_COURSES_OVERVIEW')")
     public List<CourseProgressDto> getCourseProgress(@PathVariable UUID studentId) {
         return courseService.getCourseProgress(studentId);
     }
