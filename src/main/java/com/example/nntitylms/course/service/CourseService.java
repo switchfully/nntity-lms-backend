@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseService {
@@ -33,21 +34,22 @@ public class CourseService {
     }
 
     public List<CourseProgressDto> getCourseProgress(UUID studentId) {
-        User foundStudent = userRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "USer with id " + studentId + " not found"));
+        User foundStudent = userRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id " + studentId + " not found"));
         List<StudentCodelab> foundStudentCodelabs = studentCodelabRepository.findByUser(foundStudent);
-
         List<Course> foundCourses = courseRepository.findAll();
+        return generateCourseProgressDtoList(foundStudentCodelabs, foundCourses);
+    }
 
+    private List<CourseProgressDto> generateCourseProgressDtoList(List<StudentCodelab> foundStudentCodelabs, List<Course> foundCourses) {
         List<CourseProgressDto> courseProgressDtoList = new ArrayList<>();
         for (Course course : foundCourses) {
             List<Codelab> courseCodelabs = course.getCodelabList();
-            Long courseCompletedCodelabs = foundStudentCodelabs.stream()
-                    .filter(studentCodelab -> courseCodelabs.contains(studentCodelab.getCodelab()))
+            List<StudentCodelab> courseStudentCodelabs = foundStudentCodelabs.stream()
+                    .filter(studentCodelab -> courseCodelabs.contains(studentCodelab.getCodelab())).toList();
+            Long courseCompletedCodelabs = courseStudentCodelabs.stream()
                     .filter(studentCodelab -> studentCodelab.getStatus().equals(CodelabStatus.DONE) || studentCodelab.getStatus().equals(CodelabStatus.FEEDBACK_NEEDED))
                     .count();
-            Long courseTotalCodelabs = foundStudentCodelabs.stream()
-                    .filter(studentCodelab -> courseCodelabs.contains(studentCodelab.getCodelab()))
-                    .count();
+            int courseTotalCodelabs = courseStudentCodelabs.size();
             courseProgressDtoList.add(courseMapper.toDto(course, courseCompletedCodelabs, courseTotalCodelabs));
         }
         return courseProgressDtoList;
