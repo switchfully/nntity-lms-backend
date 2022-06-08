@@ -1,5 +1,9 @@
 package com.example.nntitylms.student_codelab.service;
 
+import com.example.nntitylms.codelab.domain.Codelab;
+import com.example.nntitylms.codelab.domain.CodelabRepository;
+import com.example.nntitylms.course.domain.Course;
+import com.example.nntitylms.course.domain.CourseRepository;
 import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import com.example.nntitylms.student_codelab.domain.StudentCodelab;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
@@ -24,16 +28,26 @@ public class StudentCodelabService {
     private final StudentCodelabRepository studentCodelabRepository;
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(StudentCodelabService.class);
+    private final CourseRepository courseRepository;
+    private final CodelabRepository codelabRepository;
 
-    public StudentCodelabService(StudentCodelabMapper studentCodelabMapper, StudentCodelabRepository studentCodelabRepository, UserRepository userRepository) {
+    public StudentCodelabService(StudentCodelabMapper studentCodelabMapper, StudentCodelabRepository studentCodelabRepository, UserRepository userRepository, CourseRepository courseRepository, CodelabRepository codelabRepository) {
         this.studentCodelabMapper = studentCodelabMapper;
         this.studentCodelabRepository = studentCodelabRepository;
         this.userRepository = userRepository;
+        this.courseRepository = courseRepository;
+        this.codelabRepository = codelabRepository;
     }
 
-    public List<StudentCodelabDto> getCodelabsOfStudent(UUID studentId) {
-        List<StudentCodelab> foundCodelabs = findCodelabsInRepository(studentId);
-        return studentCodelabMapper.toDto(foundCodelabs);
+    public List<StudentCodelabDto> getCodelabsOfStudentByCourse(UUID studentId, Long courseId) {
+        List<StudentCodelab> foundStudentCodelabs = findCodelabsInRepository(studentId);
+        Course foundCourse = courseRepository.findById(courseId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "unexpected error: no course found for id " + courseId));
+        List<Codelab> codelabsByCourse = foundCourse.getCodelabList();
+
+        List<StudentCodelab> filteredStudentCodelabs = foundStudentCodelabs.stream().filter(studentCodelab -> codelabsByCourse.contains(studentCodelab.getCodelab())).toList();
+
+        return studentCodelabMapper.toDto(filteredStudentCodelabs);
     }
 
     public List<StudentCodelabDto> updateStudentCodelabs(UUID studentId, List<StudentCodelabDto> updatedCodelabs) {
@@ -50,10 +64,7 @@ public class StudentCodelabService {
     }
 
     private List<StudentCodelab> findCodelabsInRepository(UUID studentId) {
-        if (!userRepository.existsById(studentId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No student found for id " + studentId);
-        }
-        User foundStudent = userRepository.findById(studentId).get();
+        User foundStudent = userRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No student found for id " + studentId));
         return studentCodelabRepository.findByUser(foundStudent);
     }
 }

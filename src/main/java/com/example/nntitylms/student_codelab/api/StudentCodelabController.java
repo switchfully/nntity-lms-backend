@@ -20,11 +20,11 @@ public class StudentCodelabController {
         this.studentCodelabService = studentCodelabService;
     }
 
-    @GetMapping(path = "/{studentId}", produces = "application/json")
+    @GetMapping(path = "/{studentId}/courses/{courseId}", produces = "application/json")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAuthority('VIEW_PERSONAL_OVERVIEW')")
-    public List<StudentCodelabDto> getCodelabsOfStudent(@PathVariable UUID studentId) {
-        return studentCodelabService.getCodelabsOfStudent(studentId);
+    public List<StudentCodelabDto> getCodelabsOfStudentByCourse(@PathVariable UUID studentId, @PathVariable Long courseId) {
+        return studentCodelabService.getCodelabsOfStudentByCourse(studentId, courseId);
     }
 
     @PutMapping(path = "/{studentId}", consumes = "application/json", produces = "application/json")

@@ -30,6 +30,8 @@ class StudentCodelabControllerTest {
 
     private static final UUID TEST_STUDENT_ID = UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6");
 
+    private static final Long TEST_COURSE_ID = 2L;
+
     @LocalServerPort
     private int port;
 
@@ -39,8 +41,8 @@ class StudentCodelabControllerTest {
     @Test
     void getStudentCodelabs_provideCorrectCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -48,7 +50,7 @@ class StudentCodelabControllerTest {
                 .port(port)
                 .when()
                 .contentType(JSON)
-                .get("/student-codelabs/" + TEST_STUDENT_ID)
+                .get("/student-codelabs/" + TEST_STUDENT_ID + "/courses/" + TEST_COURSE_ID)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -63,8 +65,8 @@ class StudentCodelabControllerTest {
     @Test
     void getStudentCodelabs_sortMethodWorksCorrectly() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY),
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE)
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -72,7 +74,7 @@ class StudentCodelabControllerTest {
                 .port(port)
                 .when()
                 .contentType(JSON)
-                .get("/student-codelabs/" + TEST_STUDENT_ID)
+                .get("/student-codelabs/" + TEST_STUDENT_ID + "/courses/" + TEST_COURSE_ID)
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -87,7 +89,7 @@ class StudentCodelabControllerTest {
     @Test
     void givenWrongEmail_WhenGetStudentCodelabs_ThenReturnBadRequestAndCorrectErrorIsThrown() {
         //  GIVEN
-        UUID unknownStudentId = UUID.randomUUID();
+        UUID unknownStudentId = UUID.fromString("11111111-1111-1111-1111-111111111112");
 
         //  WHEN
         RestAssured.given()
@@ -95,13 +97,13 @@ class StudentCodelabControllerTest {
                 .port(port)
                 .when()
                 .contentType(JSON)
-                .get("/student-codelabs/" + unknownStudentId)
+                .get("/student-codelabs/" + unknownStudentId + "/courses/" + TEST_COURSE_ID)
                 .then()
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());
 
-//  THEN
-        Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudent(unknownStudentId));
+        //  THEN
+        Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudentByCourse(unknownStudentId, TEST_COURSE_ID));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId + "\"");
@@ -111,7 +113,8 @@ class StudentCodelabControllerTest {
     void updateStudentCodelabs_provideCorrectlyUpdatedCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
                 new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -138,8 +141,9 @@ class StudentCodelabControllerTest {
         UUID unknownStudentId = UUID.randomUUID();
 
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED),
+                new StudentCodelabDto(3L, TEST_STUDENT_ID, "CodelabTest3", CodelabStatus.FEEDBACK_NEEDED)
         );
 
         RestAssured.given()
@@ -154,7 +158,7 @@ class StudentCodelabControllerTest {
                 .assertThat()
                 .statusCode(BAD_REQUEST.value());
 
-        Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudent(unknownStudentId));
+        Throwable thrown = Assertions.catchThrowable(() -> studentCodelabService.getCodelabsOfStudentByCourse(unknownStudentId, TEST_COURSE_ID));
         Assertions.assertThat(thrown)
                 .isInstanceOf(ResponseStatusException.class)
                 .hasMessage("400 BAD_REQUEST \"No student found for id " + unknownStudentId + "\"");

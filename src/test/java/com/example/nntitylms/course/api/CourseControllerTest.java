@@ -40,7 +40,7 @@ class CourseControllerTest {
     void getCourseProgress_provideCorrectResult() {
         List<CourseProgressDto> expectedList = List.of(
                 new CourseProgressDto(1L, "Composition", 1, 1),
-                new CourseProgressDto(2L, "Polymorphism", 0, 1)
+                new CourseProgressDto(2L, "Polymorphism", 1, 2)
         );
 
         List<CourseProgressDto> resultList = RestAssured.given()
