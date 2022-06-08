@@ -34,7 +34,7 @@ public class CourseService {
     }
 
     public List<CourseProgressDto> getCourseProgress(UUID studentId) {
-        User foundStudent = userRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with id " + studentId + " not found"));
+        User foundStudent = userRepository.findById(studentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "No student found for id " + studentId));
         List<StudentCodelab> foundStudentCodelabs = studentCodelabRepository.findByUser(foundStudent);
         List<Course> foundCourses = courseRepository.findAll();
         return generateCourseProgressDtoList(foundStudentCodelabs, foundCourses);
