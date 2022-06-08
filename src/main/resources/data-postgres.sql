@@ -76,3 +76,6 @@ VALUES (6,
         'NOT_STARTED',
         'Comment for codelab 3');
 
+UPDATE LMS_USER
+SET EMAIL = 'bob@nn.com'
+WHERE ID = 'bd39d3fc-d101-4865-aa2e-bac55a5d4321';
