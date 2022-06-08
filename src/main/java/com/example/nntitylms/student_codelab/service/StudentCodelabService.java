@@ -29,14 +29,12 @@ public class StudentCodelabService {
     private final UserRepository userRepository;
     private final Logger logger = LoggerFactory.getLogger(StudentCodelabService.class);
     private final CourseRepository courseRepository;
-    private final CodelabRepository codelabRepository;
 
-    public StudentCodelabService(StudentCodelabMapper studentCodelabMapper, StudentCodelabRepository studentCodelabRepository, UserRepository userRepository, CourseRepository courseRepository, CodelabRepository codelabRepository) {
+    public StudentCodelabService(StudentCodelabMapper studentCodelabMapper, StudentCodelabRepository studentCodelabRepository, UserRepository userRepository, CourseRepository courseRepository) {
         this.studentCodelabMapper = studentCodelabMapper;
         this.studentCodelabRepository = studentCodelabRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
-        this.codelabRepository = codelabRepository;
     }
 
     public List<StudentCodelabDto> getCodelabsOfStudentByCourse(UUID studentId, Long courseId) {
@@ -46,7 +44,7 @@ public class StudentCodelabService {
         List<Codelab> codelabsByCourse = foundCourse.getCodelabList();
 
         List<StudentCodelab> filteredStudentCodelabs = foundStudentCodelabs.stream().filter(studentCodelab -> codelabsByCourse.contains(studentCodelab.getCodelab())).toList();
-
+        logger.info("Filtered codelabs for studentId " + studentId + " and courseId " + courseId);
         return studentCodelabMapper.toDto(filteredStudentCodelabs);
     }
 
@@ -60,6 +58,7 @@ public class StudentCodelabService {
             codelab.setStatus(studentCodelabToUpdate.getStatus());
         }
         studentCodelabRepository.saveAll(studentCodelabsToUpdate);
+        logger.info("Updated codelabs for studentId " + studentId);
         return studentCodelabMapper.toDto(studentCodelabsToUpdate);
     }
 
