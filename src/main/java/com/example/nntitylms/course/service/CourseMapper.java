@@ -6,12 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class CourseMapper {
-    public CourseProgressDto toDto(Course course, Long courseCompletedCodelabs, Long courseTotalCodelabs) {
+    public CourseProgressDto toDto(Course course, Long courseCompletedCodelabs, int courseTotalCodelabs) {
         return new CourseProgressDto(
                 course.getId(),
                 course.getName(),
                 Math.toIntExact(courseCompletedCodelabs),
-                Math.toIntExact(courseTotalCodelabs)
+                courseTotalCodelabs
         );
     }
 }
