@@ -42,4 +42,12 @@ public class Codelab {
     public int hashCode() {
         return Objects.hash(id, name);
     }
+
+    @Override
+    public String toString() {
+        return "Codelab{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

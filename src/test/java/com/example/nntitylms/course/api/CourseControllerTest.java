@@ -28,13 +28,13 @@ class CourseControllerTest {
     @LocalServerPort
     private int port;
 
-    private static final UUID TEST_STUDENT_ID = UUID.fromString("bd39d3fc-d101-4865-aa2e-bac55a5d4321");
+    private static final UUID TEST_STUDENT_ID = UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6");
 
     @Test
     void getCourseProgress_provideCorrectResult() {
         List<CourseProgressDto> expectedList = List.of(
                 new CourseProgressDto(1L, "Composition", 1, 1),
-                new CourseProgressDto(2L, "Polymorphism", 1, 2)
+                new CourseProgressDto(2L, "Polymorphism", 0, 1)
         );
 
         List<CourseProgressDto> resultList = RestAssured.given()
