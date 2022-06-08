@@ -28,7 +28,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @ActiveProfiles("disable-keycloak")
 class StudentCodelabControllerTest {
 
-    private static final UUID TEST_STUDENT_ID = UUID.fromString("bd39d3fc-d101-4865-aa2e-bac55a5d4321");
+    private static final UUID TEST_STUDENT_ID = UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6");
 
     @LocalServerPort
     private int port;
@@ -39,8 +39,8 @@ class StudentCodelabControllerTest {
     @Test
     void getStudentCodelabs_provideCorrectCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.BUSY)
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -63,8 +63,8 @@ class StudentCodelabControllerTest {
     @Test
     void getStudentCodelabs_sortMethodWorksCorrectly() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.BUSY),
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE)
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.BUSY),
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()
@@ -110,8 +110,8 @@ class StudentCodelabControllerTest {
     @Test
     void updateStudentCodelabs_provideCorrectlyUpdatedCodelabsOfStudent() {
         List<StudentCodelabDto> expectedList = List.of(
-                new StudentCodelabDto(1L, TEST_STUDENT_ID, "Codelab01", CodelabStatus.DONE),
-                new StudentCodelabDto(2L, TEST_STUDENT_ID, "Codelab02", CodelabStatus.FEEDBACK_NEEDED)
+                new StudentCodelabDto(1L, TEST_STUDENT_ID, "CodelabTest1", CodelabStatus.DONE),
+                new StudentCodelabDto(2L, TEST_STUDENT_ID, "CodelabTest2", CodelabStatus.FEEDBACK_NEEDED)
         );
 
         List<StudentCodelabDto> resultList = RestAssured.given()

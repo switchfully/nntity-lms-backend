@@ -28,11 +28,17 @@ VALUES (
            'CodelabTest2'
        );
 
+INSERT INTO CODELAB (id, name)
+VALUES (
+           nextval('codelab_seq'),
+           'CodelabTest3'
+       );
+
 INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
 VALUES (
         nextval('student_codelab_seq'),
             '2812b4ba-90ea-497d-9185-16772cc475f6',
-            3,
+            1,
             'DONE'
            );
 
@@ -40,7 +46,7 @@ INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
 VALUES (
            nextval('student_codelab_seq'),
            '2812b4ba-90ea-497d-9185-16772cc475f6',
-           4,
+           2,
            'BUSY'
        );
 
@@ -48,7 +54,7 @@ INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
 VALUES (
            nextval('student_codelab_seq'),
            'bc9091ba-c0b7-412b-ad7e-eb7665e06078',
-           3,
+           1,
            'DONE'
        );
 
@@ -56,7 +62,7 @@ INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
 VALUES (
            nextval('student_codelab_seq'),
            'bc9091ba-c0b7-412b-ad7e-eb7665e06078',
-           4,
+           2,
            'STUCK'
        );
 
@@ -64,6 +70,6 @@ INSERT INTO STUDENT_CODELAB (id, fk_student_id, fk_codelab_id, progress)
 VALUES (
            nextval('student_codelab_seq'),
            'bc9091ba-c0b7-412b-ad7e-eb7665e06078',
-           1,
+           3,
            'FEEDBACK_NEEDED'
        );

@@ -1,6 +1,5 @@
 package com.example.nntitylms.user.api;
 
-import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.student_codelab.domain.StudentCodelabRepository;
 import com.example.nntitylms.user.api.dto.LoginUserDto;
 import com.example.nntitylms.user.api.dto.RegisterStudentDto;

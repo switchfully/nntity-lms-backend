@@ -4,6 +4,3 @@ CREATE TABLE student (
     EMAIL VARCHAR(320) NOT NULL UNIQUE,
     PASSWORD VARCHAR(255) NOT NULL
 );
-
-INSERT INTO student (ID, DISPLAY_NAME, EMAIL, PASSWORD)
-VALUES ('bd39d3fc-d101-4865-aa2e-bac55a5d4321', 'Bob The Builder', 'bob@tity.com', '123456');
