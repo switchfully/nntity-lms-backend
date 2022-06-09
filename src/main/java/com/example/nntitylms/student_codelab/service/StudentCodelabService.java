@@ -1,7 +1,6 @@
 package com.example.nntitylms.student_codelab.service;
 
 import com.example.nntitylms.codelab.domain.Codelab;
-import com.example.nntitylms.codelab.domain.CodelabRepository;
 import com.example.nntitylms.course.domain.Course;
 import com.example.nntitylms.course.domain.CourseRepository;
 import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;

@@ -28,7 +28,7 @@ public class StudentCodelab {
     @Column(name = "PROGRESS")
     private CodelabStatus status;
 
-    @Column (name = "COMMENT")
+    @Column(name = "COMMENT")
     private String comment;
 
     public StudentCodelab() {

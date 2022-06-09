@@ -1,9 +1,7 @@
 package com.example.nntitylms.course.api;
 
-import com.example.nntitylms.codelab.domain.CodelabStatus;
 import com.example.nntitylms.course.api.dto.CourseProgressDto;
 import com.example.nntitylms.course.service.CourseService;
-import com.example.nntitylms.student_codelab.api.dto.StudentCodelabDto;
 import io.restassured.RestAssured;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static io.restassured.http.ContentType.JSON;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)

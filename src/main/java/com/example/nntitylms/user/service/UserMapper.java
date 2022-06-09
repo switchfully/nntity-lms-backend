@@ -19,7 +19,7 @@ public class UserMapper {
                 accessToken);
     }
 
-    public StudentProgressDto toStudentProgressDto(User student, Map<CodelabStatus,Long> codelabProgressMap, int totalCodelabs) {
+    public StudentProgressDto toStudentProgressDto(User student, Map<CodelabStatus, Long> codelabProgressMap, int totalCodelabs) {
         return new StudentProgressDto(student.getId(), student.getDisplayName(), codelabProgressMap, totalCodelabs);
     }
 

@@ -29,7 +29,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 class StudentCodelabControllerTest {
 
     private static final UUID TEST_STUDENT_ID = UUID.fromString("2812b4ba-90ea-497d-9185-16772cc475f6");
-    private static final String STUDENTCODELAB_COMMENT  = "COMMENT";
+    private static final String STUDENTCODELAB_COMMENT = "COMMENT";
 
     private static final Long TEST_COURSE_ID = 2L;
 

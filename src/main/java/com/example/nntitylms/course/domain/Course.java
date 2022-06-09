@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table (name = "COURSE")
+@Table(name = "COURSE")
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "course_seq")
@@ -17,7 +17,7 @@ public class Course {
     private String name;
 
     @OneToMany
-    @JoinColumn (name = "FK_COURSE_ID")
+    @JoinColumn(name = "FK_COURSE_ID")
     private List<Codelab> codelabList;
 
     public Course(String name, List<Codelab> codelabList) {
