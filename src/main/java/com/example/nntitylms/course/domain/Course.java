@@ -40,12 +40,4 @@ public class Course {
         return codelabList;
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", codelabList=" + codelabList +
-                '}';
-    }
 }

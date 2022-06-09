@@ -54,17 +54,6 @@ public class StudentCodelabDto implements Comparable<StudentCodelabDto> {
     }
 
     @Override
-    public String toString() {
-        return "StudentCodelabDto{" +
-                "id=" + id +
-                ", studentId=" + studentId +
-                ", codelabName='" + codelabName + '\'' +
-                ", status=" + status +
-                ", comment='" + comment + '\'' +
-                '}';
-    }
-
-    @Override
     public int compareTo(StudentCodelabDto o) {
         return (int) (this.id - o.id);
     }

@@ -49,16 +49,6 @@ public class StudentProgressDto implements Comparable<StudentProgressDto> {
     }
 
     @Override
-    public String toString() {
-        return "StudentProgressDto{" +
-                "studentId=" + studentId +
-                ", displayName='" + displayName + '\'' +
-                ", codelabProgressMap=" + codelabProgressMap +
-                ", totalCodelabs=" + totalCodelabs +
-                '}';
-    }
-
-    @Override
     public int compareTo(StudentProgressDto o) {
         return this.displayName.compareTo(o.displayName);
     }
